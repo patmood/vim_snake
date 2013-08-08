@@ -12,12 +12,14 @@ $(document).ready(function(){
   var food
   var score = 0
   var snake_array
+  var insert_mode
 
   function init(){
     d = "right"  //default direction
     score = 0
     create_snake()
     create_food()
+    insert_mode = false
 
     if (typeof game_loop != "undefined") clearInterval(game_loop)
     // call the paint function every 60ms
@@ -72,7 +74,7 @@ $(document).ready(function(){
 
     // Logic to make snake eat food
     // if head position is same as food create new head instead of moving tail
-    if(nx == food.x && ny == food.y){
+    if(nx == food.x && ny == food.y && insert_mode){
       var tail = {x: nx, y: ny}
       score++
       create_food()
@@ -92,6 +94,13 @@ $(document).ready(function(){
     }
 
     paint_cell(food.x, food.y, "#f1c40f")
+
+    if (insert_mode){
+      ctx.font = '12pt monospace'
+      ctx.fillStyle = "black"
+      ctx.fillText("--INSERT--", 5, h-5);
+    }
+
   }
 
   // paint cells
@@ -122,10 +131,24 @@ $(document).ready(function(){
   // keyboard controls
   $(document).keydown(function(e){
     var key = e.which
-    if(key == "37" && d != "right") d = "left"
-    else if (key == "38" && d != "up") d = "down"
-    else if (key == "39" && d != "left") d = "right"
-    else if (key == "40" && d != "down") d = "up"
+
+    // arrow keys
+    // if(key == "37" && d != "right") d = "left"
+    // else if (key == "38" && d != "up") d = "down"
+    // else if (key == "39" && d != "left") d = "right"
+    // else if (key == "40" && d != "down") d = "up"
+
+    // vim controls
+    if (insert_mode){
+      if (key == "27") insert_mode = false
+    } else {
+      if(key == "72" && d != "right") d = "left"
+      else if (key == "74" && d != "up") d = "down"
+      else if (key == "76" && d != "left") d = "right"
+      else if (key == "75" && d != "down") d = "up"
+      else if (key == "73") insert_mode = true
+      else if (key == "27") insert_mode = false
+    }
 
   })
 

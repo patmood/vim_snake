@@ -1,11 +1,38 @@
-<!-- Snake canvas -->
-<canvas id="canvas" width="459" height="459"></canvas>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Snake Vim Trainer</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  <script src="snake.js"></script>
 
-<!-- jquery -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  <style>
+    div {
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <h1>Snake Vim Trainer</h1>
+  <div>
+    <canvas id="canvas" width="459" height="459"></canvas>
+  </div>
+  <div>
+    <h2>Instructions</h2>
+    <p>Make your Vim snake eat the food to increase your score. You can only eat food while INSERT mode is on. You cannot change direction while INSERT mode is on</p>
+    <p>Controls:</p>
+    <ul>
+      <li>Left: h</li>
+      <li>Down: j</li>
+      <li>Up: k</li>
+      <li>Right: l</li>
+      <li>Insert mode: i</li>
+      <li>Normal mode: esc</li>
+    </ul>
 
-<!-- game code -->
-<script src="snake.js"></script>
+  </div>
+  <div id="score"></div>
+  <div id="speed"></div>
 
-<div id="score"></div>
-<div id="speed"></div>
+</body>
+</html>

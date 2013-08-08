@@ -67,8 +67,8 @@ $(document).ready(function(){
     // increment to get new head position and find direction
     if (d=="right") nx++
     else if (d=="left") nx--
-    else if (d=="up") ny++
-    else if (d=="down") ny--
+    else if (d=="up") ny--
+    else if (d=="down") ny++
 
     if (check_collision(nx,ny,snake_array)){
       init() //resart game

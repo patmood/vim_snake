@@ -7,19 +7,35 @@
   <script src="snake.js"></script>
 
   <style>
-    div {
+    body {
+      color: #00CC00;
+      background-color: #000;
+      font-family: monospace;
+    }
+    h1 { text-align: center; color: #00CC00; font-size: 42px}
+    h2 { color: #00CC00;}
+    p { color: #00CC00;}
+
+    .instructions, .game{
       display: inline-block;
+      vertical-align: top;
+      padding: 20px;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
     }
   </style>
 </head>
 <body>
   <h1>Snake Vim Trainer</h1>
-  <div>
-    <canvas id="canvas" width="459" height="459"></canvas>
+  <div class="game">
+    <canvas id="canvas" width="500" height="500"></canvas>
   </div>
-  <div>
+  <div class="instructions">
     <h2>Instructions</h2>
-    <p>Make your Vim snake eat the food to increase your score. You can only eat food while INSERT mode is on. You cannot change direction while INSERT mode is on</p>
+    <p>Make your Vim snake eat the food to increase your score.</p>
+    <p>You can only eat food while INSERT mode is on.</p>
+    <p>You cannot change direction while INSERT mode is on</p>
     <p>Controls:</p>
     <ul>
       <li>Left: h</li>

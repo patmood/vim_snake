@@ -55,9 +55,9 @@ $(document).ready(function(){
 
     // paint the GB on every frame
     // paint the canvas
-    ctx.fillStyle = "white"
+    ctx.fillStyle = "black"
     ctx.fillRect(0,0,w,h)
-    ctx.strokeStyle = "black"
+    ctx.strokeStyle = "#00CC00"
     ctx.strokeRect(0,0,w,h)
 
     // this is the head of snake
@@ -94,14 +94,14 @@ $(document).ready(function(){
     for(var i=0; i<snake_array.length; i++){
       var c = snake_array[i]
       // paint snake cells
-      paint_cell(c.x,c.y,"#2ecc71")
+      paint_cell(c.x,c.y,"#00CC00")
     }
 
     paint_cell(food.x, food.y, "#f1c40f")
 
     if (insert_mode){
       ctx.font = '12pt monospace'
-      ctx.fillStyle = "black"
+      ctx.fillStyle = "#00CC00"
       ctx.fillText("--INSERT--", 5, h-5);
     }
 
@@ -113,7 +113,7 @@ $(document).ready(function(){
     // paint food cells
     ctx.fillStyle = color
     ctx.fillRect(x*cw,y*cw,cw,cw)
-    ctx.strokeStyle = "white"
+    ctx.strokeStyle = color
     ctx.strokeRect(x*cw, y*cw,cw,cw)
   }
 
@@ -153,7 +153,6 @@ $(document).ready(function(){
       else if (key == "73") insert_mode = true
       else if (key == "27") insert_mode = false
     }
-
   })
 
 })

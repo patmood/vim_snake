@@ -6,22 +6,23 @@ $(document).ready(function(){
   var w = $("#canvas").width()
   var h = $("#canvas").height()
 
-  // save cell width for easy control
-  var cw = 10
-  var d
-  var food
 
-  // create snake
+  var cw = 10  //cell width
+  var d  //direction
+  var food
+  var score = 0
   var snake_array
 
   function init(){
     d = "right"  //default direction
+    score = 0
     create_snake()
     create_food()
 
     if (typeof game_loop != "undefined") clearInterval(game_loop)
     // call the paint function every 60ms
     game_loop = setInterval(paint, 60)
+
   }
 
   init()
@@ -45,6 +46,8 @@ $(document).ready(function(){
   // paint the snake
   function paint(){
 
+    $('#score').html(score)
+
     // paint the GB on every frame
     // paint the canvas
     ctx.fillStyle = "white"
@@ -62,8 +65,7 @@ $(document).ready(function(){
     else if (d=="up") ny++
     else if (d=="down") ny--
 
-    // wall collision detection
-    if (nx <= -1 || nx >= Math.round(w/cw)|| ny <= -1 || ny >= Math.round(h/cw)){
+    if (check_collision(nx,ny,snake_array)){
       init() //resart game
       return
     }
@@ -72,6 +74,7 @@ $(document).ready(function(){
     // if head position is same as food create new head instead of moving tail
     if(nx == food.x && ny == food.y){
       var tail = {x: nx, y: ny}
+      score++
       create_food()
     } else {
       // move the tail cell in front of the head
@@ -101,9 +104,19 @@ $(document).ready(function(){
     ctx.strokeRect(x*cw, y*cw,cw,cw)
   }
 
-  // check snake collision
   function check_collision(x,y,array){
-
+    // wall collision detection
+    if (x <= -1 || x >= w/cw|| y <= -1 || y >= h/cw){
+      return true
+    } else {
+      // check body collision
+      for (var i = 0; i < array.length; i++){
+        if(x == array[i].x && y == array[i].y){
+          return true
+        }
+      }
+      return false
+    }
   }
 
   // keyboard controls

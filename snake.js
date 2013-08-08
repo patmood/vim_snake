@@ -13,17 +13,19 @@ $(document).ready(function(){
   var score = 0
   var snake_array
   var insert_mode
+  var speed  // in miliseconds
 
   function init(){
     d = "right"  //default direction
     score = 0
+    speed = 100
     create_snake()
     create_food()
     insert_mode = false
 
     if (typeof game_loop != "undefined") clearInterval(game_loop)
-    // call the paint function every 60ms
-    game_loop = setInterval(paint, 60)
+    // call the paint function depending on game speed
+    game_loop = setInterval(paint, speed)
 
   }
 
@@ -49,6 +51,7 @@ $(document).ready(function(){
   function paint(){
 
     $('#score').html(score)
+    $('#speed').html(speed)
 
     // paint the GB on every frame
     // paint the canvas
@@ -77,6 +80,7 @@ $(document).ready(function(){
     if(nx == food.x && ny == food.y && insert_mode){
       var tail = {x: nx, y: ny}
       score++
+      speed -= 10
       create_food()
     } else {
       // move the tail cell in front of the head

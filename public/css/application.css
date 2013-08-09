@@ -4,7 +4,7 @@ body {
   font-family: monospace;
   font-size: 18px;
 }
-h1, h2 {text-align: center; color: #00CC00; margin: 0.1em 0 0 0.1em;}
+h1, h2, h3 {text-align: center; color: #00CC00; margin: 0.1em 0 0 0.1em;}
 h1 { font-size: 42px}
 
 .instructions, .game{

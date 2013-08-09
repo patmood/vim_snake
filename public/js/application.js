@@ -81,7 +81,7 @@ $(document).ready(function(){
     // if head position is same as food create new head instead of moving tail
     if(nx == food.x && ny == food.y && insert_mode){
       var tail = {x: nx, y: ny}
-      score++
+      score += 125
       speed -= 10
       create_food()
     } else {

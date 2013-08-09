@@ -30,6 +30,9 @@
       <p>Speed: <span id="speed"></span></p>
       <% if current_user %>
         <%= erb(:user_details, :layout => false) %>
+      <% else %>
+        <h1>Make your score count!</h1>
+        <h1><a href="/signin/">Sign In With Twitter!</h1>
       <% end %>
 
     </div>

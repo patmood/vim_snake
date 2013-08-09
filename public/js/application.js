@@ -84,7 +84,7 @@ $(document).ready(function(){
       score += 125
 
       // Speed up the game
-      speed -= 5
+      speed -= 3
       if (typeof game_loop != "undefined") clearInterval(game_loop)
       // call the paint function depending on game speed
       game_loop = setInterval(paint, speed)
@@ -106,7 +106,7 @@ $(document).ready(function(){
       paint_cell(c.x,c.y,"#00CC00")
     }
 
-    paint_cell(food.x, food.y, "#f1c40f")
+    paint_cell(food.x, food.y, "#f1c40f") //paint the food
 
     if (insert_mode){
       ctx.font = '12pt monospace'

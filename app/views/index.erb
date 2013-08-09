@@ -1,9 +1,16 @@
 <div class="container">
   <h1>Snake Vim Trainer</h1>
+  <h2>Hone your vim navigation skillz</h2>
     <div class="game">
-      <canvas id="canvas" width="500" height="500"></canvas>
+      <canvas id="canvas" width="500" height="500"></canvas><br>
+      <p>Score: <span id="score"></span>  Speed: <span id="speed"></span></p>
     </div>
     <div class="instructions">
+      <% if current_user %>
+        <%= erb(:user_details, :layout => false) %>
+      <% else %>
+        <a href="/signin" class="button">Sign In With Twitter!</a>
+      <% end %>
       <h2>Instructions</h2>
       <p>Make your Vim snake eat the food to increase your score.</p>
       <p>You can only eat food while INSERT mode is on.</p>
@@ -19,21 +26,12 @@
       </ul>
 
       <h1>Leaderboard:</h1>
-      <ul>
+      <ol>
         <% @leaders.each do |leader| %>
           <li>@<%= leader.handle %>: <%= leader.topscore %></li>
         <% end %>
-      </ul>
+      </ol>
 
-
-      <p>Score: <span id="score"></span></p>
-      <p>Speed: <span id="speed"></span></p>
-      <% if current_user %>
-        <%= erb(:user_details, :layout => false) %>
-      <% else %>
-        <h1>Make your score count!</h1>
-        <h1><a href="/signin/">Sign In With Twitter!</h1>
-      <% end %>
 
     </div>
 </div>

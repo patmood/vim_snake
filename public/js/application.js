@@ -58,7 +58,7 @@ $(document).ready(function(){
     ctx.fillStyle = "black"
     ctx.fillRect(0,0,w,h)
     ctx.strokeStyle = "#00CC00"
-    ctx.lineWidth=5
+    // ctx.lineWidth=3
     ctx.strokeRect(0,0,w,h)
 
     // this is the head of snake
@@ -72,6 +72,7 @@ $(document).ready(function(){
     else if (d=="down") ny++
 
     if (check_collision(nx,ny,snake_array)){
+      user_score(score)
       init() //resart game
       return
     }
@@ -131,6 +132,29 @@ $(document).ready(function(){
       }
       return false
     }
+  }
+
+  function user_score(score){
+    var currentTop = parseInt($('#topscore').html())
+    if (score > currentTop){
+
+      $.ajax({
+        url:'/newtop',
+        type:'POST',
+        data: {score: score},
+        success: function(){
+          alert("New High Score!")
+          $('#topscore').html(score)
+        },
+        error: function(){
+          alert("Fail");
+        }
+      })
+    }
+    // var currentTop = parseInt($('#topscore').html())
+    // if (currentTop > score){
+    //   alert("New top score! "+currentTop)
+    // }
   }
 
   // keyboard controls

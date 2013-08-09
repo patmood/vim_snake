@@ -3,6 +3,10 @@ get '/' do
   erb :index
 end
 
+post '/newtop' do
+  current_user.update_attributes(topscore: params[:score])
+end
+
 get '/signin' do
   rt = request_token
   session[:request_token] = rt

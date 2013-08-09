@@ -18,6 +18,11 @@
   <title></title>
 </head>
 <body>
+  <% if current_user %>
+    Welcome, <%= current_user.handle %>! <a href="/signout">Signout</a>
+  <% else %>
+    <a href="/signin">Signin</a>
+  <% end %>
 
   <%= yield %>
 

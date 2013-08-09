@@ -17,8 +17,11 @@
         <li>Insert mode: i</li>
         <li>Normal mode: esc</li>
       </ul>
+      <p>Score: <span id="score"></span></p>
+      <p>Speed: <span id="speed"></span></p>
+      <% if current_user %>
+        <%= erb(:user_details, :layout => false) %>
+      <% end %>
 
     </div>
-    <div id="score"></div>
-    <div id="speed"></div>
 </div>

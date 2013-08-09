@@ -35,7 +35,7 @@ $(document).ready(function(){
     var length = 5
     snake_array = []
     for(var i=length-1;i>=0; i--){
-      snake_array.push({x: i, y: 0})
+      snake_array.push({x: i, y: 10})
     }
   }
 
@@ -58,6 +58,7 @@ $(document).ready(function(){
     ctx.fillStyle = "black"
     ctx.fillRect(0,0,w,h)
     ctx.strokeStyle = "#00CC00"
+    ctx.lineWidth=5
     ctx.strokeRect(0,0,w,h)
 
     // this is the head of snake

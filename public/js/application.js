@@ -151,10 +151,6 @@ $(document).ready(function(){
         }
       })
     }
-    // var currentTop = parseInt($('#topscore').html())
-    // if (currentTop > score){
-    //   alert("New top score! "+currentTop)
-    // }
   }
 
   // keyboard controls

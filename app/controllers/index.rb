@@ -9,7 +9,7 @@ get '/signin' do
   redirect rt.authorize_url
 end
 
-get '/logout' do
+get '/signout' do
   session[:request_token] = nil
   session[:user_id] = nil
   redirect '/'

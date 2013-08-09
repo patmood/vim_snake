@@ -1,5 +1,5 @@
 get '/' do
-  # Look in app/views/index.erb
+  @leaders = User.order("topscore DESC").limit(10)
   erb :index
 end
 

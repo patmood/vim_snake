@@ -17,6 +17,15 @@
         <li>Insert mode: i</li>
         <li>Normal mode: esc</li>
       </ul>
+
+      <h1>Leaderboard:</h1>
+      <ul>
+        <% @leaders.each do |leader| %>
+          <li>@<%= leader.handle %>: <%= leader.topscore %></li>
+        <% end %>
+      </ul>
+
+
       <p>Score: <span id="score"></span></p>
       <p>Speed: <span id="speed"></span></p>
       <% if current_user %>

@@ -82,7 +82,14 @@ $(document).ready(function(){
     if(nx == food.x && ny == food.y && insert_mode){
       var tail = {x: nx, y: ny}
       score += 125
-      speed -= 10
+
+      // Speed up the game
+      speed -= 5
+      if (typeof game_loop != "undefined") clearInterval(game_loop)
+      // call the paint function depending on game speed
+      game_loop = setInterval(paint, speed)
+
+
       create_food()
     } else {
       // move the tail cell in front of the head

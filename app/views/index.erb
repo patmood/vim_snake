@@ -3,7 +3,7 @@
   <h2>Hone your vim navigation skillz</h2>
     <div class="game">
       <canvas id="canvas" width="500" height="500"></canvas><br>
-      <p>Score: <span id="score"></span>  Speed: <span id="speed"></span></p>
+      <p>Score: <span id="score"></span></p>
     </div>
     <div class="instructions">
       <% if current_user %>
@@ -28,10 +28,12 @@
       <h1>Leaderboard:</h1>
       <ol>
         <% @leaders.each do |leader| %>
-          <li>@<%= leader.handle %>: <%= leader.topscore %></li>
+          <li><a href="https://twitter.com/<%= leader.handle %>">@<%= leader.handle %></a>: <%= leader.topscore %></li>
         <% end %>
       </ol>
 
 
     </div>
 </div>
+
+<a href="https://github.com/patmood/vim_snake"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>

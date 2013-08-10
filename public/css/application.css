@@ -28,6 +28,7 @@ a:visited { color: #bdc3c7;}
   width: 100%;
   display: block;
   margin: 10px;
+  text-align: center;
 }
-.button a { color: #000; text-align: center;}
-.button a:visited { color: #000; text-align: center;}
+.button a { color: #000;}
+.button:visited { color: #000;}

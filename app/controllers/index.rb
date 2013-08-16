@@ -4,7 +4,9 @@ get '/' do
 end
 
 post '/newtop' do
-  current_user.update_attributes(topscore: params[:score]) if params[:score]%125 == 0
+  if params[:score].to_i%125 == 0
+    current_user.update_attributes(topscore: params[:score])
+  end
 end
 
 get '/signin' do

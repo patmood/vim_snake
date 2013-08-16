@@ -4,7 +4,7 @@ get '/' do
 end
 
 post '/newtop' do
-  if params[:score].to_i%125 == 0
+  if (params[:score].to_i%125 == 0 && params[:score].to_i <= 4000)
     current_user.update_attributes(topscore: params[:score])
   end
 end

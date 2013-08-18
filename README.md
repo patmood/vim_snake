@@ -18,7 +18,7 @@ Controls:
 * Up: k
 * Right: l
 * Insert mode: i
-* Normal mode: esc
+* Normal mode: esc, ctrl+[
 
 ##Technologies used:
 * HTML5 canvas

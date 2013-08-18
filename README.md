@@ -1,5 +1,5 @@
 #HTML5 Snake Game
-##Play Now! <http://vimsnake.herokuapp.com>
+##Play Now! <http://vimsnake.com>
 
 ###Hone your vim navigation skillz!
 

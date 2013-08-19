@@ -144,7 +144,7 @@ $(document).ready(function(){
 
     // vim controls
     if (insert_mode){
-      if ( t == "27" || (e.ctrlKey && t == "219"  ) ) f = false
+      if ( key == "27" || (e.ctrlKey && key == "219"  ) ) insert_mode = false
     } else {
       if(key == "72" && d != "right") d = "left"
       else if (key == "74" && d != "up") d = "down"

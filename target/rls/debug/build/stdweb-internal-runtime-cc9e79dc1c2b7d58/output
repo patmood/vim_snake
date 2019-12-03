@@ -1,0 +1,4 @@
+cargo:rustc-env=PATH_SEPARATOR=/
+cargo:rerun-if-changed=src/runtime.js
+cargo:rerun-if-changed=src/runtime_emscripten.js
+cargo:rerun-if-env-changed=COMPILING_UNDER_CARGO_WEB

@@ -1,0 +1,1 @@
+{"name":"__cargo_web_snippet_5803d131898c1bffde3d99348e6489ade3943949","code":"return Module.STDWEB_PRIVATE.acquire_rust_reference( Module.HEAP16.slice( $0, $1 ) );","arg_count":2}

@@ -1,0 +1,1 @@
+{"name":"__cargo_web_snippet_032c6280422681a941abb24c206382e18c82f589","code":"var o = Module.STDWEB_PRIVATE.acquire_js_reference( $0 );return (o instanceof DragEvent && o.type === \"dragexit\");","arg_count":1}

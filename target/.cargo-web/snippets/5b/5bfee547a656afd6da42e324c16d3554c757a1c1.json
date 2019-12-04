@@ -1,0 +1,1 @@
+{"name":"__cargo_web_snippet_0a02c7764aacc2ed939a149ae98000223d3eebe8","code":"var r = Module.STDWEB_PRIVATE.acquire_js_reference( $0 );return (r instanceof DOMException) && (r.name === \"InvalidStateError\");","arg_count":1}

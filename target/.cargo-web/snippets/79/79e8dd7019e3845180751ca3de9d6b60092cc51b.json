@@ -1,0 +1,1 @@
+{"name":"__cargo_web_snippet_dcbfa3eb1cc89d9842b0ad8d9030a57a7cae7124","code":"return (Module.STDWEB_PRIVATE.acquire_js_reference( $0 ) instanceof Uint8Array) | 0;","arg_count":1}

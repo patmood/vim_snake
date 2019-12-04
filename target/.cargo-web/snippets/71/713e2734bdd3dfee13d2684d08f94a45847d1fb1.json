@@ -1,0 +1,1 @@
+{"name":"__cargo_web_snippet_5acd702f93bb4304e9759f941189e7b4b7d68da1","code":"$1 = Module.STDWEB_PRIVATE.to_js($1);Module.STDWEB_PRIVATE.from_js($0, (function(){return new MutationObserver(($1));})());","arg_count":2}

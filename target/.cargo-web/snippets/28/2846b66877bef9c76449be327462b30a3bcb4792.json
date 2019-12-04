@@ -1,0 +1,1 @@
+{"name":"__cargo_web_snippet_7acc5a611b1dfdb40f09c005d173515f6f286581","code":"var r = Module.STDWEB_PRIVATE.acquire_js_reference( $0 );return (r instanceof DOMException) && (r.name === \"NotSupportedError\");","arg_count":1}

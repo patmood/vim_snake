@@ -1,0 +1,1 @@
+{"name":"__cargo_web_snippet_5c57e16ebd22655f976d87fae8039e282d7bab59","code":"Module.STDWEB_PRIVATE.from_js($0, (function(){return Array.from(navigator.getGamepads());})());","arg_count":1}

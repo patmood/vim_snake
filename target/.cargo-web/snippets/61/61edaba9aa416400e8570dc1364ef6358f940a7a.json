@@ -1,0 +1,1 @@
+{"name":"__cargo_web_snippet_ad7d159412cc3f611a3ed6f04ff238a29b21a272","code":"$1 = Module.STDWEB_PRIVATE.to_js($1);Module.STDWEB_PRIVATE.from_js($0, (function(){return Math.floor(Math.random()*($1))})());","arg_count":2}

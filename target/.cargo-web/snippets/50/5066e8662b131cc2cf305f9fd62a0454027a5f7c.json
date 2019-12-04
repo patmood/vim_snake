@@ -1,0 +1,1 @@
+{"name":"__cargo_web_snippet_db54fd9ffbdf71c543f54dd966fa05c88bd17fcc","code":"$1 = Module.STDWEB_PRIVATE.to_js($1);Module.STDWEB_PRIVATE.from_js($0, (function(){return($1).getUTCDay();})());","arg_count":2}

@@ -1,0 +1,1 @@
+{"name":"__cargo_web_snippet_b6fbe111e441333398599f63dc09b26f8d172654","code":"$1 = Module.STDWEB_PRIVATE.to_js($1);Module.STDWEB_PRIVATE.from_js($0, (function(){return($1).innerHeight;})());","arg_count":2}

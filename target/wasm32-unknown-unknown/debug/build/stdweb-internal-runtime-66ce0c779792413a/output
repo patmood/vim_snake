@@ -1,0 +1,2 @@
+cargo:rustc-env=PATH_SEPARATOR=/
+cargo:rerun-if-env-changed=COMPILING_UNDER_CARGO_WEB

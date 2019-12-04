@@ -1,0 +1,1 @@
+{"name":"__cargo_web_snippet_0e21a4d6fb844813ce56fa00548442d3114c8199","code":"return (Module.STDWEB_PRIVATE.acquire_js_reference( $0 ) instanceof Int32Array) | 0;","arg_count":1}

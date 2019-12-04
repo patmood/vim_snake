@@ -1,0 +1,1 @@
+{"name":"__cargo_web_snippet_3c6a01294891795b149ab0de0b0654d90e5844fe","code":"var r = Module.STDWEB_PRIVATE.acquire_js_reference( $0 );return (r instanceof DOMException) && (r.name === \"AbortError\");","arg_count":1}

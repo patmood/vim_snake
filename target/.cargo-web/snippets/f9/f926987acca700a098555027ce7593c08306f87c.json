@@ -1,0 +1,1 @@
+{"name":"__cargo_web_snippet_59a5a55df8f03933e9d938f37acdc390e61fa75c","code":"var o = Module.STDWEB_PRIVATE.acquire_js_reference( $0 );return (o instanceof CanvasGradient);","arg_count":1}

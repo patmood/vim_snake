@@ -1,0 +1,1 @@
+{"name":"__cargo_web_snippet_cf0debbfec441e126df5ec4b805a71e969f49a75","code":"$0 = Module.STDWEB_PRIVATE.to_js($0);$1 = Module.STDWEB_PRIVATE.to_js($1);$2 = Module.STDWEB_PRIVATE.to_js($2);$3 = Module.STDWEB_PRIVATE.to_js($3);$4 = Module.STDWEB_PRIVATE.to_js($4);($0).fillRect(($1),($2),($3),($4));","arg_count":5}

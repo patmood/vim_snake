@@ -18,10 +18,9 @@ pub struct Snake {
 }
 
 fn rand_int(max: u32) -> u32 {
-  let num = js! {return Math.floor(Math.random() * @{max})}
+  (js! {return Math.floor(Math.random() * @{max})})
     .try_into()
-    .unwrap();
-  num
+    .unwrap()
 }
 
 impl Snake {

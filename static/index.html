@@ -2,13 +2,25 @@
 <html class="no-js" lang="">
   <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>Vim Snake</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="manifest" href="site.webmanifest" />
-    <link rel="apple-touch-icon" href="icon.png" />
+    <!-- <link rel="apple-touch-icon" href="icon.png" /> -->
     <meta name="theme-color" content="#000000" />
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+        background-color: #000000;
+        color: #00cc00;
+        font-family: monospace;
+        font-size: 18px;
+      }
+      #wasm-snake {
+        border: 2px #00cc00 solid;
+      }
+    </style>
   </head>
   <body>
     <canvas id="wasm-snake" width="800" height="800"></canvas>

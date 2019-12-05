@@ -18,8 +18,8 @@ use std::rc::Rc;
 fn main() {
     stdweb::initialize();
 
-    let canvas = Canvas::new("#wasm-snake", 20, 20);
-    let snake = Rc::new(RefCell::new(Snake::new(20, 20)));
+    let canvas = Canvas::new("#wasm-snake", 50, 50);
+    let snake = Rc::new(RefCell::new(Snake::new(50, 50)));
 
     snake.borrow().draw(&canvas);
 
@@ -34,20 +34,22 @@ fn main() {
         }
     });
 
-    // Use request animation frame?
+    // TODO: canvas not clearing
+
+    // TODO: Use request animation frame?
     fn game_loop(snake: Rc<RefCell<Snake>>, canvas: Rc<Canvas>, time: u32) {
         stdweb::web::set_timeout(
             move || {
                 snake.borrow_mut().update();
                 snake.borrow().draw(&canvas);
-                game_loop(snake.clone(), canvas, time);
+                game_loop(snake, canvas, time);
             },
             time,
         )
     }
 
     // Kick off the loop
-    game_loop(snake, Rc::new(canvas), 100);
+    game_loop(snake, Rc::new(canvas), 50);
 
     stdweb::event_loop();
 }

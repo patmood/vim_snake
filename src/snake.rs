@@ -17,26 +17,21 @@ pub struct Snake {
   last_direction: Direction,
 }
 
+fn rand_int(max: u32) -> u32 {
+  let num = js! {return Math.floor(Math.random() * @{max})}
+    .try_into()
+    .unwrap();
+  num
+}
+
 impl Snake {
   pub fn new(width: u32, height: u32) -> Snake {
-    // Why do we use JS macro here and not generate a random int in rust?
-    let head_x: u32 = js! {return Math.floor(Math.random() * @{width})}
-      .try_into()
-      .unwrap();
-
-    let head_y: u32 = js! {return Math.floor(Math.random() * @{height})}
-      .try_into()
-      .unwrap();
-
+    let head_x: u32 = rand_int(width);
+    let head_y: u32 = rand_int(height);
     let head = Block(head_x, head_y);
 
-    let food_x: u32 = js! {return Math.floor(Math.random() * @{width})}
-      .try_into()
-      .unwrap();
-
-    let food_y: u32 = js! {return Math.floor(Math.random() * @{height})}
-      .try_into()
-      .unwrap();
+    let food_x: u32 = rand_int(width);
+    let food_y: u32 = rand_int(height);
     let food = Block(food_x, food_y);
     let tail = Vec::new();
 
@@ -65,15 +60,19 @@ impl Snake {
     self.last_direction = direction;
 
     let new_head = match direction {
-      Direction::Up => Block(self.head.0 % self.width, (self.head.1 - 1) % self.height),
+      Direction::Up => Block(
+        self.head.0 % self.width,
+        self.head.1.checked_sub(1).unwrap_or(self.height - 1) % self.height,
+      ),
       Direction::Right => Block((self.head.0 + 1) % self.width, (self.head.1) % self.height),
       Direction::Down => Block((self.head.0) % self.width, (self.head.1 + 1) % self.height),
-      Direction::Left => Block((self.head.0 - 1) % self.width, (self.head.1) % self.height),
+      Direction::Left => Block(
+        self.head.0.checked_sub(1).unwrap_or(self.width - 1) % self.width,
+        (self.head.1) % self.height,
+      ),
     };
 
     self.tail.insert(0, self.head);
-    // Stop this when we eat food (or move it so we only do it when no food)
-    let _last_end = self.tail.pop();
 
     // Has the snake run into it's tail?
     if self.tail.contains(&new_head) {
@@ -83,18 +82,15 @@ impl Snake {
     // Eat food
     self.head = new_head;
     if self.head == self.food {
-      let food = self.food;
-      while food == self.head || self.tail.contains(&food) {
+      while self.food == self.head || self.tail.contains(&self.food) {
         // Create a new random food block and make sure it's not within the snake
-        let food_x: u32 = js! {return Math.floor(Math.random() * @{self.width})}
-          .try_into()
-          .unwrap();
-
-        let food_y: u32 = js! {return Math.floor(Math.random() * @{self.height})}
-          .try_into()
-          .unwrap();
+        let food_x: u32 = rand_int(self.width);
+        let food_y: u32 = rand_int(self.height);
         self.food = Block(food_x, food_y);
       }
+    } else {
+      // Pop the tail if we didnt eat food (most of the time)
+      let _last_end = self.tail.pop();
     }
 
     self.direction = self.next_direction.take();
@@ -102,10 +98,10 @@ impl Snake {
 
   pub fn draw(&self, canvas: &Canvas) {
     canvas.clear_all();
-    canvas.draw(self.head.0, self.head.1, "green");
+    canvas.draw(self.head.0, self.head.1, "#00cc00");
     for &Block(x, y) in &self.tail {
-      canvas.draw(x, y, "yellow");
+      canvas.draw(x, y, "#00cc00");
     }
-    canvas.draw(self.food.0, self.food.1, "red");
+    canvas.draw(self.food.0, self.food.1, "#f1c40f");
   }
 }

@@ -32,6 +32,7 @@ var (
 )
 
 func main() {
+	loop := 0
 	runGameForever := make(chan bool)
 
 	var gs = gameState{snake: make([]point, 0), dir: Right}
@@ -44,7 +45,14 @@ func main() {
 		resetCanvas()
 		updateGame(&gs)
 		render(&gs)
-		window.Call("requestAnimationFrame", renderer)
+		loop = loop + 1
+
+		if loop > 5 {
+			gs.dir = Down
+		}
+		if loop < 100 {
+			window.Call("requestAnimationFrame", renderer)
+		}
 		return nil
 	})
 
@@ -61,25 +69,28 @@ func updateGame(gs *gameState) {
 	switch gs.dir {
 	case Up:
 		go log("up")
-		newHead = point{x: head.x, y: head.y + 1}
+		newHead = point{x: head.x, y: head.y - 1}
 	case Right:
 		go log("right")
 		newHead = point{x: head.x + 1, y: head.y}
 	case Down:
 		go log("down")
-		newHead = point{x: head.x, y: head.y - 1}
+		newHead = point{x: head.x, y: head.y + 1}
 	case Left:
 		go log("left")
 		newHead = point{x: head.x - 1, y: head.y}
 	}
-
 	gs.snake = append(gs.snake, newHead)
+
+	// Check colisions with tail
+	// Remove first element if no food
+	gs.snake = gs.snake[1:]
 }
 
 func render(gs *gameState) {
 	// Draw snake
 	for i := 0; i < len(gs.snake); i++ {
-		go log("snakeX:", gs.snake[i].x, "snakeY:", gs.snake[i].y)
+		// go log("snakeX:", gs.snake[i].x, "snakeY:", gs.snake[i].y)
 		paintCell(gs.snake[i].x, gs.snake[i].y, "yellow")
 	}
 }

@@ -8,10 +8,11 @@ Build on changes `fswatch -o . | xargs -n1 -I{} ./build`
 
 ## TODO
 
-[]
+[] Test live
 
 ## Notes
 
 Useful references:
-https://marianogappa.github.io/software/2020/04/01/webassembly-tinygo-cheesse/
-https://github.com/olso/go-wasm-cat-game-on-canvas-with-docker
+
+- https://marianogappa.github.io/software/2020/04/01/webassembly-tinygo-cheesse/
+- https://github.com/olso/go-wasm-cat-game-on-canvas-with-docker

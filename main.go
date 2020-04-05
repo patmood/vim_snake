@@ -10,6 +10,7 @@ type Direction int
 type gameState struct {
 	snake      []point
 	dir        Direction
+	pendingDir Direction
 	insertMode bool
 	food       point
 	score      int
@@ -49,6 +50,7 @@ func main() {
 	var gs = gameState{
 		snake:      make([]point, 0),
 		dir:        Right,
+		pendingDir: Right,
 		insertMode: false,
 		food:       point{x: randomInstance.Intn(canvasSize), y: randomInstance.Intn(canvasSize)},
 		score:      0,
@@ -79,6 +81,7 @@ func updateGame(gs *gameState) {
 	head := gs.snake[len(gs.snake)-1]
 	var newHead point
 
+	gs.dir = gs.pendingDir
 	switch gs.dir {
 	case Up:
 		newHead = point{x: head.x, y: head.y - 1}
@@ -116,14 +119,14 @@ func updateGame(gs *gameState) {
 }
 
 func render(gs *gameState) {
+	// Draw food
+	paintCell(gs.food.x, gs.food.y, "yellow")
+
 	// Draw snake
 	for i := 0; i < len(gs.snake); i++ {
 		// go log("snakeX:", gs.snake[i].x, "snakeY:", gs.snake[i].y)
 		paintCell(gs.snake[i].x, gs.snake[i].y, primaryColor)
 	}
-	go log(gs.food.x, gs.food.y)
-	// Draw food
-	paintCell(gs.food.x, gs.food.y, "yellow")
 }
 
 func paintCell(x int, y int, color string) {
@@ -170,19 +173,19 @@ func updateDirection(gs *gameState, key string) {
 		gs.insertMode = false
 	case "ArrowUp":
 		if gs.dir != Down {
-			gs.dir = Up
+			gs.pendingDir = Up
 		}
 	case "ArrowRight":
 		if gs.dir != Left {
-			gs.dir = Right
+			gs.pendingDir = Right
 		}
 	case "ArrowDown":
 		if gs.dir != Up {
-			gs.dir = Down
+			gs.pendingDir = Down
 		}
 	case "ArrowLeft":
 		if gs.dir != Right {
-			gs.dir = Left
+			gs.pendingDir = Left
 		}
 	}
 }
@@ -196,12 +199,13 @@ func resetCanvas() {
 }
 
 func resetGame(gs *gameState) {
+	startY := canvasSize / 2
 	// Init snake
 	gs.snake = make([]point, 0)
-	gs.snake = append(gs.snake, point{0, 1})
-	gs.snake = append(gs.snake, point{0, 2})
-	gs.snake = append(gs.snake, point{0, 3})
-	gs.snake = append(gs.snake, point{0, 4})
+	gs.snake = append(gs.snake, point{0, startY})
+	gs.snake = append(gs.snake, point{1, startY})
+	gs.snake = append(gs.snake, point{2, startY})
+	gs.snake = append(gs.snake, point{3, startY})
 
 	gs.food = point{x: randomInstance.Intn(canvasSize), y: randomInstance.Intn(canvasSize)}
 	gs.score = 0

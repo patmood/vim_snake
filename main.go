@@ -27,6 +27,7 @@ const (
 const cellSize int = 10
 const canvasSize int = 50
 const scoreStep int = 500
+const gameSpeed int = 100
 const primaryColor string = "#00CC00"
 
 var (
@@ -62,13 +63,13 @@ func main() {
 		updateGame(&gs)
 		render(&gs)
 		loop = loop + 1
-		if loop < 100 {
-			window.Call("requestAnimationFrame", renderer)
+		if loop < 300 {
+			// 	window.Call("requestAnimationFrame", renderer)
 		}
 		return nil
 	})
 
-	window.Call("requestAnimationFrame", renderer)
+	window.Call("setInterval", renderer, gameSpeed)
 
 	<-runGameForever
 }
@@ -88,15 +89,23 @@ func updateGame(gs *gameState) {
 	case Left:
 		newHead = point{x: head.x - 1, y: head.y}
 	}
-	gs.snake = append(gs.snake, newHead)
 
 	// Check colisions with tail
+	for i := 0; i < len(gs.snake); i++ {
+		if gs.snake[i].x == newHead.x && gs.snake[i].y == newHead.y {
+			// Game over man, game over.
+			// TODO: save score
+			log("score", gs.score)
+			resetGame(gs)
+		}
+	}
+
+	gs.snake = append(gs.snake, newHead)
 
 	// Check for food
-	if head.x == gs.food.x && head.y == gs.food.y {
+	if newHead.x == gs.food.x && newHead.y == gs.food.y {
 		gs.score = gs.score + scoreStep
 		gs.food = point{x: randomInstance.Intn(canvasSize), y: randomInstance.Intn(canvasSize)}
-		go log("score", gs.score)
 	} else {
 		// Remove tail (first element) if no food
 		gs.snake = gs.snake[1:]
@@ -137,13 +146,7 @@ func setup(gs *gameState) {
 	// paint the canvas
 	canvasCtx = canvas.Call("getContext", "2d")
 	resetCanvas()
-
-	// Init snake
-	gs.snake = make([]point, 0)
-	gs.snake = append(gs.snake, point{0, 1})
-	gs.snake = append(gs.snake, point{0, 2})
-	gs.snake = append(gs.snake, point{0, 3})
-	gs.snake = append(gs.snake, point{0, 4})
+	resetGame(gs)
 
 	// Key event handlers
 	keydownEventHandler := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
@@ -190,6 +193,19 @@ func resetCanvas() {
 	canvasCtx.Set("strokeStyle", primaryColor)
 	canvasCtx.Call("fillRect", 0, 0, gameWidth, gameHeight)
 	canvasCtx.Call("strokeRect", 0, 0, gameWidth, gameHeight)
+}
+
+func resetGame(gs *gameState) {
+	// Init snake
+	gs.snake = make([]point, 0)
+	gs.snake = append(gs.snake, point{0, 1})
+	gs.snake = append(gs.snake, point{0, 2})
+	gs.snake = append(gs.snake, point{0, 3})
+	gs.snake = append(gs.snake, point{0, 4})
+
+	gs.food = point{x: randomInstance.Intn(canvasSize), y: randomInstance.Intn(canvasSize)}
+	gs.score = 0
+	gs.dir = Right
 }
 
 // basically a rest+spread from javascript

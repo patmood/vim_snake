@@ -4,47 +4,94 @@ import (
 	"syscall/js"
 )
 
+type Direction int
+type gameState struct {
+	snake []point
+	dir   Direction
+}
+type point struct{ x, y int }
+
+// Enum of directions
+const (
+	Up Direction = iota + 1
+	Right
+	Down
+	Left
+)
+
 const cellSize int = 10
 const canvasSize int = 50
 const primaryColor string = "#00CC00"
 
 var (
-	snake                                     []point
 	gameWidth                                 = cellSize * canvasSize
 	gameHeight                                = cellSize * canvasSize
 	canvasCtx                                 js.Value
 	window, doc, body, canvas, laserCtx, beep js.Value
 	windowSize                                struct{ w, h float64 }
-	gs                                        = gameState{laserSize: 35, directionX: 3.7, directionY: -3.7, laserX: 40, laserY: 40}
 )
 
 func main() {
 	runGameForever := make(chan bool)
 
-	setup()
+	var gs = gameState{snake: make([]point, 0), dir: Right}
+
+	setup(&gs)
 
 	var renderer js.Func
 
 	renderer = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		updateGame()
+		resetCanvas()
+		updateGame(&gs)
+		render(&gs)
 		window.Call("requestAnimationFrame", renderer)
 		return nil
 	})
+
 	window.Call("requestAnimationFrame", renderer)
 
 	<-runGameForever
 }
 
-func updateGame() {
-	resetCanvas()
+func updateGame(gs *gameState) {
+	// Append new head to snake based on direction
+	head := gs.snake[len(gs.snake)-1]
+	var newHead point
 
-	for i := 0; i < len(snake); i++ {
-		go log("snakeX:", snake[i].x, "snakeY:", snake[i].y)
+	switch gs.dir {
+	case Up:
+		go log("up")
+		newHead = point{x: head.x, y: head.y + 1}
+	case Right:
+		go log("right")
+		newHead = point{x: head.x + 1, y: head.y}
+	case Down:
+		go log("down")
+		newHead = point{x: head.x, y: head.y - 1}
+	case Left:
+		go log("left")
+		newHead = point{x: head.x - 1, y: head.y}
 	}
 
+	gs.snake = append(gs.snake, newHead)
 }
 
-func setup() {
+func render(gs *gameState) {
+	// Draw snake
+	for i := 0; i < len(gs.snake); i++ {
+		go log("snakeX:", gs.snake[i].x, "snakeY:", gs.snake[i].y)
+		paintCell(gs.snake[i].x, gs.snake[i].y, "yellow")
+	}
+}
+
+func paintCell(x int, y int, color string) {
+	canvasCtx.Set("fillStyle", color)
+	canvasCtx.Set("strokeStyle", color)
+	canvasCtx.Call("fillRect", x*cellSize, y*cellSize, cellSize, cellSize)
+	canvasCtx.Call("strokeRect", x*cellSize, y*cellSize, cellSize, cellSize)
+}
+
+func setup(gs *gameState) {
 	window = js.Global()
 	doc = window.Get("document")
 	body = doc.Get("body")
@@ -58,9 +105,9 @@ func setup() {
 	canvasCtx = canvas.Call("getContext", "2d")
 	resetCanvas()
 
-	// Add head to snake
-	snake = make([]point, 0)
-	snake = append(snake, point{10, 10})
+	// Init snake
+	gs.snake = make([]point, 0)
+	gs.snake = append(gs.snake, point{0, 10})
 
 	body.Call("appendChild", canvas)
 
@@ -75,9 +122,6 @@ func resetCanvas() {
 	canvasCtx.Call("fillRect", 0, 0, gameWidth, gameHeight)
 	canvasCtx.Call("strokeRect", 0, 0, gameWidth, gameHeight)
 }
-
-type gameState struct{ laserX, laserY, directionX, directionY, laserSize float64 }
-type point struct{ x, y int }
 
 // basically a rest+spread from javascript
 // ...interface{} is more or less `any` from Typescript

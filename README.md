@@ -4,7 +4,7 @@ Vim Snake written in Go and compiled to Web Assembly
 
 ## Development
 
-Build on changes `fswatch -o . | xargs -n1 -I{} ./build`
+Build on changes `fswatch -o ./main.go | xargs -n1 -I{} ./build`
 
 ## TODO
 

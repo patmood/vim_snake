@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vim Snake</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="index.ts"></script>
+  </head>
+  <body>
+    <header class="header">
+      <h1>Snake Vim Trainer</h1>
+      <h2>Hone your vim navigation skills</h2>
+    </header>
+    <main id="wasm">
+      <section class="wrapper">
+        <div class="game" id="game"></div>
+
+        <div class="instructions">
+          <h2>Instructions</h2>
+          <p>Make your Vim snake eat the food to increase your score.</p>
+          <p>You can only eat food while INSERT mode is on.</p>
+          <p>You cannot change direction while INSERT mode is on</p>
+          <p>Controls:</p>
+          <ul>
+            <li>Left: h</li>
+            <li>Down: j</li>
+            <li>Up: k</li>
+            <li>Right: l</li>
+            <li>Insert mode: i</li>
+            <li>Normal mode: esc</li>
+          </ul>
+        </div>
+      </section>
+      <footer class="footer">
+        Built by <a href="http://patmoody.com" target="_blank">Patrick Moody</a>
+      </footer>
+    </main>
+  </body>
+</html>

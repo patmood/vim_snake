@@ -1,0 +1,67 @@
+html {
+  padding: 0;
+  margin: 0;
+  background-color: #000;
+}
+body {
+  color: #00cc00;
+  background-color: #000;
+  font-family: monospace;
+  font-size: 18px;
+  padding: 0;
+  margin: 0;
+}
+h1,
+h2,
+h3 {
+  font-weight: normal;
+  text-align: center;
+  color: #00cc00;
+  margin: 0.1em 0 0 0.1em;
+}
+h1 {
+  font-size: 42px;
+}
+
+.header,
+.footer {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.game {
+  padding: 1rem;
+}
+
+.instructions {
+  padding: 1rem;
+  flex: 1;
+}
+
+a {
+  color: #ecf0f1;
+}
+a:visited {
+  color: #bdc3c7;
+}
+.button {
+  background-color: #f1c40f;
+  color: #000;
+  padding: 10px;
+  width: 100%;
+  display: block;
+  margin: 10px;
+  text-align: center;
+}
+.button a {
+  color: #000;
+}
+.button:visited {
+  color: #000;
+}

@@ -1,0 +1,23 @@
+{
+  "name": "vim_snake",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/patmood/vim_snake",
+  "author": "patmood <patrick.n.moody@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel ./src/index.html",
+    "build": "parcel build ./src/index.html"
+  },
+  "staticFiles": {
+    "watcherGlob": "*.wasm"
+  },
+  "browserslist": [
+    "last 1 Chrome versions"
+  ],
+  "devDependencies": {
+    "parcel": "^1.12.4",
+    "parcel-plugin-static-files-copy": "^2.3.1",
+    "typescript": "^3.8.3"
+  }
+}

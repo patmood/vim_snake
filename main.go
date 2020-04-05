@@ -62,7 +62,6 @@ func main() {
 	var renderer js.Func
 
 	renderer = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		resetCanvas()
 		updateGame(&gs)
 		render(&gs)
 		loop = loop + 1
@@ -135,6 +134,8 @@ func updateGame(gs *gameState) {
 }
 
 func render(gs *gameState) {
+	resetCanvas()
+
 	// Draw food
 	paintCell(gs.food.x, gs.food.y, "yellow")
 
@@ -143,6 +144,15 @@ func render(gs *gameState) {
 		// go log("snakeX:", gs.snake[i].x, "snakeY:", gs.snake[i].y)
 		paintCell(gs.snake[i].x, gs.snake[i].y, primaryColor)
 	}
+
+	// Draw score
+	canvasCtx.Set("fillStyle", "white")
+	canvasCtx.Call("fillText", gs.score, 10, 20)
+
+	if gs.insertMode {
+		canvasCtx.Call("fillText", "-- INSERT --", 10, canvasSize*cellSize-10)
+	}
+
 }
 
 func paintCell(x int, y int, color string) {
@@ -212,6 +222,7 @@ func resetCanvas() {
 	canvasCtx.Set("strokeStyle", primaryColor)
 	canvasCtx.Call("fillRect", 0, 0, gameWidth, gameHeight)
 	canvasCtx.Call("strokeRect", 0, 0, gameWidth, gameHeight)
+	canvasCtx.Set("font", "14px monospace")
 }
 
 func resetGame(gs *gameState) {

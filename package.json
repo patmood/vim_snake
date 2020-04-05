@@ -10,7 +10,8 @@
     "build": "parcel build ./src/index.html"
   },
   "staticFiles": {
-    "watcherGlob": "*.wasm"
+    "staticPath": "static",
+    "watcherGlob": "**"
   },
   "browserslist": [
     "last 1 Chrome versions"

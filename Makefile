@@ -1,4 +1,4 @@
-say_hello:
+build:
 	@echo "building..."
 	@tinygo build -o ./static/main.wasm -target wasm ./main.go
 	@echo "done"

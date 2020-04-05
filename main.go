@@ -1,7 +1,9 @@
 package main
 
 import (
+	"math/rand"
 	"syscall/js"
+	"time"
 )
 
 type Direction int
@@ -9,6 +11,8 @@ type gameState struct {
 	snake      []point
 	dir        Direction
 	insertMode bool
+	food       point
+	score      int
 }
 type point struct{ x, y int }
 
@@ -22,6 +26,7 @@ const (
 
 const cellSize int = 10
 const canvasSize int = 50
+const scoreStep int = 500
 const primaryColor string = "#00CC00"
 
 var (
@@ -30,13 +35,23 @@ var (
 	canvasCtx                                 js.Value
 	window, doc, body, canvas, laserCtx, beep js.Value
 	windowSize                                struct{ w, h float64 }
+	randomInstance                            *rand.Rand
 )
 
 func main() {
 	loop := 0
 	runGameForever := make(chan bool)
 
-	var gs = gameState{snake: make([]point, 0), dir: Right, insertMode: false}
+	s1 := rand.NewSource(time.Now().UnixNano())
+	randomInstance = rand.New(s1)
+
+	var gs = gameState{
+		snake:      make([]point, 0),
+		dir:        Right,
+		insertMode: false,
+		food:       point{x: randomInstance.Intn(canvasSize), y: randomInstance.Intn(canvasSize)},
+		score:      0,
+	}
 
 	setup(&gs)
 
@@ -78,8 +93,14 @@ func updateGame(gs *gameState) {
 	// Check colisions with tail
 
 	// Check for food
-	// Remove first element if no food
-	gs.snake = gs.snake[1:]
+	if head.x == gs.food.x && head.y == gs.food.y {
+		gs.score = gs.score + scoreStep
+		gs.food = point{x: randomInstance.Intn(canvasSize), y: randomInstance.Intn(canvasSize)}
+		go log("score", gs.score)
+	} else {
+		// Remove tail (first element) if no food
+		gs.snake = gs.snake[1:]
+	}
 
 	// Check boundary
 
@@ -89,8 +110,11 @@ func render(gs *gameState) {
 	// Draw snake
 	for i := 0; i < len(gs.snake); i++ {
 		// go log("snakeX:", gs.snake[i].x, "snakeY:", gs.snake[i].y)
-		paintCell(gs.snake[i].x, gs.snake[i].y, "yellow")
+		paintCell(gs.snake[i].x, gs.snake[i].y, primaryColor)
 	}
+	go log(gs.food.x, gs.food.y)
+	// Draw food
+	paintCell(gs.food.x, gs.food.y, "yellow")
 }
 
 func paintCell(x int, y int, color string) {

@@ -8,9 +8,6 @@ Build on changes `fswatch -o . | xargs -n1 -I{} ./build`
 
 ## TODO
 
-[] check boundary
-[] check tail
-[] add food
 []
 
 ## Notes

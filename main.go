@@ -26,9 +26,9 @@ const (
 )
 
 const cellSize int = 10
-const canvasSize int = 50
+const canvasSize int = 20
 const scoreStep int = 500
-const gameSpeed int = 200
+const gameSpeed int = 100
 const primaryColor string = "#00CC00"
 
 var (
@@ -84,13 +84,29 @@ func updateGame(gs *gameState) {
 	gs.dir = gs.pendingDir
 	switch gs.dir {
 	case Up:
-		newHead = point{x: head.x, y: head.y - 1}
+		if head.y-1 < 0 {
+			newHead = point{x: head.x, y: canvasSize - 1}
+		} else {
+			newHead = point{x: head.x, y: head.y - 1}
+		}
 	case Right:
-		newHead = point{x: head.x + 1, y: head.y}
+		if head.x+1 >= canvasSize {
+			newHead = point{x: 0, y: head.y}
+		} else {
+			newHead = point{x: head.x + 1, y: head.y}
+		}
 	case Down:
-		newHead = point{x: head.x, y: head.y + 1}
+		if head.y+1 >= canvasSize {
+			newHead = point{x: head.x, y: 0}
+		} else {
+			newHead = point{x: head.x, y: head.y + 1}
+		}
 	case Left:
-		newHead = point{x: head.x - 1, y: head.y}
+		if head.x-1 < 0 {
+			newHead = point{x: canvasSize - 1, y: head.y}
+		} else {
+			newHead = point{x: head.x - 1, y: head.y}
+		}
 	}
 
 	// Check colisions with tail
@@ -114,8 +130,6 @@ func updateGame(gs *gameState) {
 		// Remove tail (first element) if no food
 		gs.snake = gs.snake[1:]
 	}
-
-	// Check boundary
 
 }
 

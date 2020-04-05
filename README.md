@@ -6,6 +6,13 @@ Vim Snake written in Go and compiled to Web Assembly
 
 Build on changes `fswatch -o . | xargs -n1 -I{} ./build`
 
+## TODO
+
+[] check boundary
+[] check tail
+[] add food
+[]
+
 ## Notes
 
 Useful references:

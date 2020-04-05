@@ -76,8 +76,13 @@ func updateGame(gs *gameState) {
 	gs.snake = append(gs.snake, newHead)
 
 	// Check colisions with tail
+
+	// Check for food
 	// Remove first element if no food
 	gs.snake = gs.snake[1:]
+
+	// Check boundary
+
 }
 
 func render(gs *gameState) {
@@ -111,7 +116,10 @@ func setup(gs *gameState) {
 
 	// Init snake
 	gs.snake = make([]point, 0)
-	gs.snake = append(gs.snake, point{0, 10})
+	gs.snake = append(gs.snake, point{0, 1})
+	gs.snake = append(gs.snake, point{0, 2})
+	gs.snake = append(gs.snake, point{0, 3})
+	gs.snake = append(gs.snake, point{0, 4})
 
 	// Key event handlers
 	keydownEventHandler := js.FuncOf(func(this js.Value, args []js.Value) interface{} {

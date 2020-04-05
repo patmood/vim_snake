@@ -28,7 +28,7 @@ const (
 const cellSize int = 10
 const canvasSize int = 50
 const scoreStep int = 500
-const gameSpeed int = 100
+const gameSpeed int = 200
 const primaryColor string = "#00CC00"
 
 var (
@@ -100,6 +100,7 @@ func updateGame(gs *gameState) {
 			// TODO: save score
 			log("score", gs.score)
 			resetGame(gs)
+			return
 		}
 	}
 
@@ -199,6 +200,7 @@ func resetCanvas() {
 }
 
 func resetGame(gs *gameState) {
+	resetCanvas()
 	startY := canvasSize / 2
 	// Init snake
 	gs.snake = make([]point, 0)
@@ -210,6 +212,8 @@ func resetGame(gs *gameState) {
 	gs.food = point{x: randomInstance.Intn(canvasSize), y: randomInstance.Intn(canvasSize)}
 	gs.score = 0
 	gs.dir = Right
+	gs.pendingDir = Right
+	gs.insertMode = false
 }
 
 // basically a rest+spread from javascript

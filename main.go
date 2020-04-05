@@ -113,8 +113,6 @@ func updateGame(gs *gameState) {
 	for i := 0; i < len(gs.snake); i++ {
 		if gs.snake[i].x == newHead.x && gs.snake[i].y == newHead.y {
 			// Game over man, game over.
-			// TODO: save score
-			log("score", gs.score)
 			resetGame(gs)
 			return
 		}
@@ -123,9 +121,10 @@ func updateGame(gs *gameState) {
 	gs.snake = append(gs.snake, newHead)
 
 	// Check for food
-	if newHead.x == gs.food.x && newHead.y == gs.food.y {
+	if gs.insertMode && newHead.x == gs.food.x && newHead.y == gs.food.y {
 		gs.score = gs.score + scoreStep
 		gs.food = point{x: randomInstance.Intn(canvasSize), y: randomInstance.Intn(canvasSize)}
+		window.Call("setScore", gs.score)
 	} else {
 		// Remove tail (first element) if no food
 		gs.snake = gs.snake[1:]
@@ -145,11 +144,9 @@ func render(gs *gameState) {
 		paintCell(gs.snake[i].x, gs.snake[i].y, primaryColor)
 	}
 
-	// Draw score
-	canvasCtx.Set("fillStyle", "white")
-	canvasCtx.Call("fillText", gs.score, 10, 20)
-
+	// Draw insert mode text
 	if gs.insertMode {
+		canvasCtx.Set("fillStyle", "white")
 		canvasCtx.Call("fillText", "-- INSERT --", 10, canvasSize*cellSize-10)
 	}
 
@@ -198,19 +195,19 @@ func updateDirection(gs *gameState, key string) {
 	case "Escape":
 		gs.insertMode = false
 	case "ArrowUp":
-		if gs.dir != Down {
+		if gs.dir != Down && !gs.insertMode {
 			gs.pendingDir = Up
 		}
 	case "ArrowRight":
-		if gs.dir != Left {
+		if gs.dir != Left && !gs.insertMode {
 			gs.pendingDir = Right
 		}
 	case "ArrowDown":
-		if gs.dir != Up {
+		if gs.dir != Up && !gs.insertMode {
 			gs.pendingDir = Down
 		}
 	case "ArrowLeft":
-		if gs.dir != Right {
+		if gs.dir != Right && !gs.insertMode {
 			gs.pendingDir = Left
 		}
 	}
@@ -240,6 +237,7 @@ func resetGame(gs *gameState) {
 	gs.dir = Right
 	gs.pendingDir = Right
 	gs.insertMode = false
+	window.Call("setScore", gs.score)
 }
 
 // basically a rest+spread from javascript

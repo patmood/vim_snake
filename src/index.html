@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vim Snake</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <script src="index.ts"></script>
   </head>
   <body>
     <header class="header">
@@ -14,7 +13,10 @@
     </header>
     <main id="wasm">
       <section class="wrapper">
-        <div class="game" id="game"></div>
+        <div class="game-container">
+          <div id="game"></div>
+          <p>Score: <span id="score"></span></p>
+        </div>
 
         <div class="instructions">
           <h2>Instructions</h2>
@@ -36,5 +38,6 @@
         Built by <a href="http://patmoody.com" target="_blank">Patrick Moody</a>
       </footer>
     </main>
+    <script src="index.ts"></script>
   </body>
 </html>

@@ -31,7 +31,9 @@ twitterBtn.addEventListener('click', () => {
     .auth()
     .signInWithPopup(provider)
     .then(function (result) {
-      var user = result.user
+      const token = result.credential.accessToken
+      const secret = result.credential.secret
+      const user = result.user
       console.log({ result })
     })
     .catch(function (error) {

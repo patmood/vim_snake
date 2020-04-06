@@ -20,5 +20,8 @@
     "parcel": "^1.12.4",
     "parcel-plugin-static-files-copy": "^2.3.1",
     "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "firebase": "^7.13.2"
   }
 }

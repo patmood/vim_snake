@@ -28,7 +28,7 @@ const (
 
 const cellSize int = 10
 const canvasSize int = 50
-const scoreStep int = 500
+const scoreStep int = 125
 const gameSpeed int = 100
 const primaryColor string = "#00CC00"
 
@@ -194,19 +194,19 @@ func updateDirection(gs *gameState, key string) {
 		gs.insertMode = true
 	case "Escape":
 		gs.insertMode = false
-	case "ArrowUp":
+	case "k":
 		if gs.dir != Down && !gs.insertMode {
 			gs.pendingDir = Up
 		}
-	case "ArrowRight":
+	case "l":
 		if gs.dir != Left && !gs.insertMode {
 			gs.pendingDir = Right
 		}
-	case "ArrowDown":
+	case "j":
 		if gs.dir != Up && !gs.insertMode {
 			gs.pendingDir = Down
 		}
-	case "ArrowLeft":
+	case "h":
 		if gs.dir != Right && !gs.insertMode {
 			gs.pendingDir = Left
 		}

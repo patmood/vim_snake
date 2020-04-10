@@ -27,6 +27,7 @@ h1 {
 .footer {
   text-align: center;
   margin-bottom: 1rem;
+  font-size: 0.9rem;
 }
 
 .wrapper {
@@ -49,8 +50,8 @@ h1 {
   display: none !important;
 }
 
-.white {
-  color: white;
+.center {
+  text-align: center;
 }
 
 .instructions {

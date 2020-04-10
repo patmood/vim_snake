@@ -13,8 +13,6 @@ export interface State {
 export interface UserDoc {
   displayName: string
   photoURL: string
-  twitterOauthToken: string
-  twitterOauthTokenSecret: string
   uid: string
   username: string
   topScore?: {

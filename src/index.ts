@@ -47,9 +47,7 @@ firebase.auth().onAuthStateChanged((user) => {
       console.log('user updated!', doc.data())
       const userDoc = doc.data() as UserDoc
       state = { ...state, user: { ...userDoc } }
-      topScoreEl.innerText = String(
-        userDoc.topScore ? userDoc.topScore.score : 0
-      )
+      topScoreEl.innerText = String(userDoc.topScore ? userDoc.topScore.score : 0)
     })
   } else {
     // show signin button
@@ -64,12 +62,8 @@ twitterBtn.addEventListener('click', () => {
     .auth()
     .signInWithPopup(provider)
     .then((result) => {
-      const twitterOauthToken = result.credential.accessToken
-      const twitterOauthTokenSecret = result.credential.secret
       const user = result.user
       const userDoc: UserDoc = {
-        twitterOauthToken,
-        twitterOauthTokenSecret,
         uid: user.uid,
         displayName: user.displayName,
         photoURL: user.photoURL,

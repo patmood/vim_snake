@@ -14,6 +14,8 @@ const scoreEl = document.getElementById('score')
 const topScoreEl = document.getElementById('topScore')
 const twitterBtn = document.getElementById('twitter')
 
+const processScore = functions.httpsCallable('processScore')
+
 // Expose functions to call from Go
 window.setScore = function setScore(score: number) {
   scoreEl.innerText = String(score)
@@ -24,16 +26,9 @@ window.saveScore = function saveScore(score: number) {
     // TODO: prompt the user to sign in with twitter
     return
   }
-  console.log({ score })
+
   if (score > state.user.topScore.score) {
-    db.collection('users')
-      .doc(state.user.uid)
-      .update({
-        topScore: {
-          score,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        },
-      })
+    processScore({ score })
   }
 }
 
@@ -41,10 +36,8 @@ window.saveScore = function saveScore(score: number) {
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     // User is signed in.
-    console.log('Subscibe to user updates for', user.uid)
     signinEl.classList.add('hidden')
     db.doc(`users/${user.uid}`).onSnapshot((doc) => {
-      console.log('user updated!', doc.data())
       const userDoc = doc.data() as UserDoc
       state = { ...state, user: { ...userDoc } }
       topScoreEl.innerText = String(userDoc.topScore ? userDoc.topScore.score : 0)

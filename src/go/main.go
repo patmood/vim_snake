@@ -33,6 +33,10 @@ const gameSpeed int = 100
 const primaryColor string = "#00CC00"
 const headColor string = "#00a400"
 
+// Filled by build flag
+var ScoreSecret string
+var Version string
+
 var (
 	gameWidth                           = cellSize * canvasSize
 	gameHeight                          = cellSize * canvasSize
@@ -214,6 +218,7 @@ func updateDirection(gs *gameState, key string) {
 	switch key {
 	case "i":
 		gs.insertMode = true
+		go log("version", Version)
 	case "Escape":
 		gs.insertMode = false
 	case "k":

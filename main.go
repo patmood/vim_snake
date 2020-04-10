@@ -113,6 +113,7 @@ func updateGame(gs *gameState) {
 	for i := 0; i < len(gs.snake); i++ {
 		if gs.snake[i].x == newHead.x && gs.snake[i].y == newHead.y {
 			// Game over man, game over.
+			window.Call("saveScore", gs.score)
 			resetGame(gs)
 			return
 		}

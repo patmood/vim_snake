@@ -1,25 +1,47 @@
 import { wasmLoader } from './wasm-loader'
-import { firebase } from './firebase'
+import { firebase, db } from './firebase'
+import { State, UserDoc } from './types'
 
-const WASM_URL = 'main.wasm'
+// Load the game
+wasmLoader('main.wasm')
 
-wasmLoader(WASM_URL)
+// State
+let state: State = {}
 
 const scoreEl = document.getElementById('score')
 // Expose functions to call from Go
-window.setScore = function setScore(score: string) {
+window.setScore = function setScore(score: number) {
   scoreEl.innerText = score
 }
 
-window.saveScore = function saveScore() {
-  console.log('TODO')
+window.saveScore = function saveScore(score: number) {
+  if (!state.user) {
+    // TODO: prompt the user to sign in with twitter
+    return
+  }
+  console.log({ score })
+  if (score > state.user.topScore.score) {
+    db.collection('users')
+      .doc(state.user.uid)
+      .set({ topScore: { score, timestamp: Date.now() } })
+  }
 }
 
 // Current User
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     // User is signed in.
-    console.log({ currentUser: user })
+    db.collection('users')
+      .doc(user.uid)
+      .get()
+      .then((doc) => {
+        const userDoc = doc.data() as UserDoc
+        state = { ...state, user: { ...userDoc } }
+        console.log({ state })
+      })
+      .catch(console.log)
+  } else {
+    // show signin button
   }
 })
 
@@ -30,13 +52,22 @@ twitterBtn.addEventListener('click', () => {
   firebase
     .auth()
     .signInWithPopup(provider)
-    .then(function (result) {
-      const token = result.credential.accessToken
-      const secret = result.credential.secret
+    .then((result) => {
+      const twitterOauthToken = result.credential.accessToken
+      const twitterOauthTokenSecret = result.credential.secret
       const user = result.user
-      console.log({ result })
+      return db.collection('users').doc(user.uid).set({
+        twitterOauthToken,
+        twitterOauthTokenSecret,
+        uid: user.uid,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+      })
     })
-    .catch(function (error) {
+    .then(() => {
+      console.log('Document successfully written!')
+    })
+    .catch((error) => {
       console.log({ error })
     })
 })

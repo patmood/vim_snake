@@ -1,5 +1,5 @@
 import { wasmLoader } from './wasm-loader'
-import { firebase, db } from './firebase'
+import { firebase, db, functions } from './firebase'
 import { State, UserDoc } from './types'
 
 // Load the game

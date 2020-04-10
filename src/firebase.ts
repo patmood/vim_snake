@@ -1,6 +1,7 @@
 import * as firebaseCore from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import 'firebase/functions'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAGjolOOMybJWkMzNwWanw-Z7In_V40hj0',
@@ -18,3 +19,4 @@ firebaseCore.initializeApp(firebaseConfig)
 
 export const firebase = firebaseCore
 export const db = firebaseCore.firestore()
+export const functions = firebaseCore.functions()

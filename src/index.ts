@@ -55,14 +55,18 @@ twitterBtn.addEventListener('click', () => {
     .auth()
     .signInWithPopup(provider)
     .then((result) => {
-      const user = result.user
-      const userDoc: UserDoc = {
-        uid: user.uid,
-        displayName: user.displayName,
-        photoURL: user.photoURL,
-        username: result.additionalUserInfo.username,
+      console.log({ result })
+
+      if (result.additionalUserInfo.isNewUser) {
+        const user = result.user
+        const userDoc: UserDoc = {
+          uid: user.uid,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          username: result.additionalUserInfo.username,
+        }
+        return db.doc(`users/${user.uid}`).update(userDoc)
       }
-      return db.doc(`users/${user.uid}`).update(userDoc)
     })
     .then(() => {
       console.log('Document successfully written!')

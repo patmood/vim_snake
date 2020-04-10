@@ -16,5 +16,8 @@ To deploy firebase function:
 
 ## TODO
 
+[] Handle un authenticated users top score
+[] Only make request if user top score (see processScore in index.js)
+[] Only savescore from go if top (see "REMOVE" comments)
 [] Show "i" to eat food when running over food
 [] canvas image to base 64 and save

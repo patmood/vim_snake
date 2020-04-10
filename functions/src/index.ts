@@ -7,9 +7,7 @@ export const processScore = functions.https.onCall((data, context) => {
 
   const secret = functions.config().score.secret
   const unencryptedScore = xor(data, secret)
-
   const originalScore = parseInt(unencryptedScore)
-  console.log({ unencryptedScore, originalScore })
 
   const cheater = Number.isNaN(originalScore)
 
@@ -18,7 +16,6 @@ export const processScore = functions.https.onCall((data, context) => {
     .collection('users')
     .doc(context.auth.uid)
     .update({
-      cheater,
       topScore: {
         score: originalScore,
         timestamp: admin.firestore.FieldValue.serverTimestamp(),

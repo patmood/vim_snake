@@ -16,7 +16,8 @@ export interface UserDoc {
   twitterOauthToken: string
   twitterOauthTokenSecret: string
   uid: string
-  topScore: {
+  username: string
+  topScore?: {
     timestamp: number
     score: number
   }

@@ -17,4 +17,4 @@ const firebaseConfig = {
 firebaseCore.initializeApp(firebaseConfig)
 
 export const firebase = firebaseCore
-export const db = firebase.firestore()
+export const db = firebaseCore.firestore()

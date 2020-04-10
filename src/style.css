@@ -35,13 +35,28 @@ h1 {
   justify-content: center;
 }
 
+.score-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .game-container {
   padding: 1rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.white {
+  color: white;
 }
 
 .instructions {
   padding: 1rem;
   flex: 1;
+  max-width: 500px;
 }
 
 a {
@@ -58,6 +73,10 @@ a:visited {
   display: block;
   margin: 10px;
   text-align: center;
+  font-family: inherit;
+  border: none;
+  font-size: inherit;
+  cursor: pointer;
 }
 .button a {
   color: #000;

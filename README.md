@@ -8,7 +8,9 @@ Build on changes `fswatch -o ./main.go | xargs -n1 -I{} make`
 
 ## TODO
 
-[] Test live
+[] Different color head
+[] Dont spawn food on snake
+[] Show "i" to eat food when running over food
 
 ## Notes
 

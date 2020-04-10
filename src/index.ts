@@ -8,10 +8,15 @@ wasmLoader('main.wasm')
 // State
 let state: State = {}
 
+// Elements
+const signinEl = document.getElementById('signin')
 const scoreEl = document.getElementById('score')
+const topScoreEl = document.getElementById('topScore')
+const twitterBtn = document.getElementById('twitter')
+
 // Expose functions to call from Go
 window.setScore = function setScore(score: number) {
-  scoreEl.innerText = score
+  scoreEl.innerText = String(score)
 }
 
 window.saveScore = function saveScore(score: number) {
@@ -23,7 +28,12 @@ window.saveScore = function saveScore(score: number) {
   if (score > state.user.topScore.score) {
     db.collection('users')
       .doc(state.user.uid)
-      .set({ topScore: { score, timestamp: Date.now() } })
+      .update({
+        topScore: {
+          score,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        },
+      })
   }
 }
 
@@ -31,23 +41,23 @@ window.saveScore = function saveScore(score: number) {
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     // User is signed in.
-    db.collection('users')
-      .doc(user.uid)
-      .get()
-      .then((doc) => {
-        const userDoc = doc.data() as UserDoc
-        state = { ...state, user: { ...userDoc } }
-        console.log({ state })
-      })
-      .catch(console.log)
+    console.log('Subscibe to user updates for', user.uid)
+    db.doc(`users/${user.uid}`).onSnapshot((doc) => {
+      console.log('user updated!', doc.data())
+      const userDoc = doc.data() as UserDoc
+      state = { ...state, user: { ...userDoc } }
+      topScoreEl.innerText = String(
+        state.user.topScore ? state.user.topScore.score : 0
+      )
+    })
   } else {
     // show signin button
+    signinEl.classList.remove('hidden')
   }
 })
 
 // Twitter login
 const provider = new firebase.auth.TwitterAuthProvider()
-const twitterBtn = document.getElementById('twitter')
 twitterBtn.addEventListener('click', () => {
   firebase
     .auth()
@@ -56,13 +66,15 @@ twitterBtn.addEventListener('click', () => {
       const twitterOauthToken = result.credential.accessToken
       const twitterOauthTokenSecret = result.credential.secret
       const user = result.user
-      return db.collection('users').doc(user.uid).set({
+      const userDoc: UserDoc = {
         twitterOauthToken,
         twitterOauthTokenSecret,
         uid: user.uid,
         displayName: user.displayName,
         photoURL: user.photoURL,
-      })
+        username: result.additionalUserInfo.username,
+      }
+      return db.doc(`users/${user.uid}`).update(userDoc)
     })
     .then(() => {
       console.log('Document successfully written!')

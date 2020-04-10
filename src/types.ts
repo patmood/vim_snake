@@ -12,6 +12,7 @@ export interface State {
 
 export interface UserDoc {
   displayName: string
+  cheater: boolean
   photoURL: string
   uid: string
   username: string

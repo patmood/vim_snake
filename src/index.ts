@@ -27,9 +27,9 @@ window.saveScore = function saveScore(score: number) {
     return
   }
 
-  if (score > state.user.topScore.score) {
-    processScore({ score })
-  }
+  // if (score > state.user.topScore.score) {
+  processScore(score).then(console.log).catch(console.error)
+  // }
 }
 
 // Current User

@@ -5,7 +5,7 @@
     "serve": "yarn run build && firebase emulators:start --only functions",
     "shell": "yarn run build && firebase functions:shell",
     "start": "yarn run shell",
-    "deploy": "firebase deploy --only functions",
+    "deploy": "yarn run build && firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
   "engines": {

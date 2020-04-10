@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/rand"
+	"strconv"
 	"syscall/js"
 	"time"
 )
@@ -35,7 +36,6 @@ const headColor string = "#00a400"
 
 // Filled by build flag
 var ScoreSecret string
-var Version string
 
 var (
 	gameWidth                           = cellSize * canvasSize
@@ -113,7 +113,8 @@ func updateGame(gs *gameState) {
 	for i := 0; i < len(gs.snake); i++ {
 		if gs.snake[i].x == newHead.x && gs.snake[i].y == newHead.y {
 			// Game over man, game over.
-			window.Call("saveScore", gs.score)
+			encScore := xor(strconv.Itoa(gs.score), ScoreSecret)
+			window.Call("saveScore", encScore)
 			resetGame(gs)
 			return
 		}
@@ -125,6 +126,13 @@ func updateGame(gs *gameState) {
 	if gs.insertMode && newHead.x == gs.food.x && newHead.y == gs.food.y {
 		gs.score = gs.score + scoreStep
 		spawnFood(gs)
+
+		// START REMOVE ME
+		go log(strconv.Itoa(gs.score))
+		encScore := xor(strconv.Itoa(gs.score), ScoreSecret)
+		window.Call("saveScore", encScore)
+		// END REMOVE ME
+
 		window.Call("setScore", gs.score)
 	} else {
 		// Remove tail (first element) if no food
@@ -218,7 +226,6 @@ func updateDirection(gs *gameState, key string) {
 	switch key {
 	case "i":
 		gs.insertMode = true
-		go log("version", Version)
 	case "Escape":
 		gs.insertMode = false
 	case "k":
@@ -271,4 +278,13 @@ func resetGame(gs *gameState) {
 // ...interface{} is more or less `any` from Typescript
 func log(args ...interface{}) {
 	window.Get("console").Call("log", args...)
+}
+
+// Simple encryption
+func xor(input, key string) (output string) {
+	for i := 0; i < len(input); i++ {
+		output += string(input[i] ^ key[i%len(key)])
+	}
+
+	return output
 }

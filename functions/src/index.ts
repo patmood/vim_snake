@@ -1,25 +1,36 @@
 import * as functions from 'firebase-functions'
 const admin = require('firebase-admin')
-const CryptoJS = require('crypto-js')
 admin.initializeApp()
 
 export const processScore = functions.https.onCall((data, context) => {
   if (!context.auth || !context.auth.uid) return
 
-  const { score } = data
   const secret = functions.config().score.secret
+  const unencryptedScore = xor(data, secret)
 
-  const bytes = CryptoJS.AES.decrypt(score, secret)
-  const originalScore = parseInt(bytes.toString(CryptoJS.enc.Utf8))
+  const originalScore = parseInt(unencryptedScore)
+  console.log({ unencryptedScore, originalScore })
+
+  const cheater = Number.isNaN(originalScore)
 
   return admin
     .firestore()
     .collection('users')
     .doc(context.auth.uid)
     .update({
+      cheater,
       topScore: {
         score: originalScore,
         timestamp: admin.firestore.FieldValue.serverTimestamp(),
       },
     })
 })
+
+function xor(text: string, key: string) {
+  var result = ''
+
+  for (var i = 0; i < text.length; i++) {
+    result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length))
+  }
+  return result
+}

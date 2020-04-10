@@ -120,13 +120,35 @@ func updateGame(gs *gameState) {
 	// Check for food
 	if gs.insertMode && newHead.x == gs.food.x && newHead.y == gs.food.y {
 		gs.score = gs.score + scoreStep
-		gs.food = point{x: randomInstance.Intn(canvasSize), y: randomInstance.Intn(canvasSize)}
+		spawnFood(gs)
 		window.Call("setScore", gs.score)
 	} else {
 		// Remove tail (first element) if no food
 		gs.snake = gs.snake[1:]
 	}
 
+}
+
+func spawnFood(gs *gameState) {
+	var newFood point
+	inSnake := true
+
+	for inSnake {
+		newFood = point{x: randomInstance.Intn(canvasSize), y: randomInstance.Intn(canvasSize)}
+		inSnake = isPointInSnake(gs.snake, newFood)
+	}
+
+	gs.food = newFood
+
+}
+
+func isPointInSnake(snake []point, p point) bool {
+	for _, snakeCell := range snake {
+		if snakeCell.x == p.x && snakeCell.y == p.y {
+			return true
+		}
+	}
+	return false
 }
 
 func render(gs *gameState) {

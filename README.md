@@ -8,7 +8,6 @@ Vim Snake written in Go and compiled to Web Assembly
 
 ## TODO
 
-[] Dont spawn food on snake
 [] Show "i" to eat food when running over food
 [] canvas image to base 64 and save
 

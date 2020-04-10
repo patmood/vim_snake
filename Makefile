@@ -1,4 +1,4 @@
 build:
-	@echo "building..."
-	@tinygo build -o ./static/main.wasm -target wasm ./main.go
-	@echo "done"
+	@echo "[go] building..."
+	@tinygo build -o ./dist/main.wasm -target wasm ./src/go/main.go
+	@echo "[go] done"

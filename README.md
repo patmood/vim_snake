@@ -4,13 +4,13 @@ Vim Snake written in Go and compiled to Web Assembly
 
 ## Development
 
-Build on changes `fswatch -o ./main.go | xargs -n1 -I{} make`
+`yarn start`
 
 ## TODO
 
-[] Different color head
 [] Dont spawn food on snake
 [] Show "i" to eat food when running over food
+[] canvas image to base 64 and save
 
 ## Notes
 

@@ -42,12 +42,13 @@ firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     // User is signed in.
     console.log('Subscibe to user updates for', user.uid)
+    signinEl.classList.add('hidden')
     db.doc(`users/${user.uid}`).onSnapshot((doc) => {
       console.log('user updated!', doc.data())
       const userDoc = doc.data() as UserDoc
       state = { ...state, user: { ...userDoc } }
       topScoreEl.innerText = String(
-        state.user.topScore ? state.user.topScore.score : 0
+        userDoc.topScore ? userDoc.topScore.score : 0
       )
     })
   } else {

@@ -31,6 +31,7 @@ const canvasSize int = 50
 const scoreStep int = 125
 const gameSpeed int = 100
 const primaryColor string = "#00CC00"
+const headColor string = "#00a400"
 
 var (
 	gameWidth                           = cellSize * canvasSize
@@ -42,7 +43,6 @@ var (
 )
 
 func main() {
-	loop := 0
 	runGameForever := make(chan bool)
 
 	s1 := rand.NewSource(time.Now().UnixNano())
@@ -64,10 +64,6 @@ func main() {
 	renderer = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		updateGame(&gs)
 		render(&gs)
-		loop = loop + 1
-		if loop < 300 {
-			// 	window.Call("requestAnimationFrame", renderer)
-		}
 		return nil
 	})
 
@@ -141,8 +137,11 @@ func render(gs *gameState) {
 
 	// Draw snake
 	for i := 0; i < len(gs.snake); i++ {
-		// go log("snakeX:", gs.snake[i].x, "snakeY:", gs.snake[i].y)
-		paintCell(gs.snake[i].x, gs.snake[i].y, primaryColor)
+		if i == len(gs.snake)-1 {
+			paintCell(gs.snake[i].x, gs.snake[i].y, headColor)
+		} else {
+			paintCell(gs.snake[i].x, gs.snake[i].y, primaryColor)
+		}
 	}
 
 	// Draw insert mode text

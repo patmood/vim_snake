@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions'
-const admin = require('firebase-admin')
+import * as admin from 'firebase-admin'
 admin.initializeApp()
 
 export const processScore = functions.https.onCall((data, context) => {
@@ -23,44 +23,42 @@ export const processScore = functions.https.onCall((data, context) => {
   let prevScore: any
   let username: any
 
-  return admin
-    .auth()
-    .getUser(uid)
-    .then((result: any) => {
-      username = result.displayName
-      return Promise.resolve()
-    })
-    .then(() => scoresRef.doc(uid).get())
-    .then((doc: any) => {
-      prevScore = doc.data()
-      return Promise.resolve()
-    })
-    .then(() => {
-      // Save cheaters
-      if (cheater) {
-        return cheatersRef.doc(uid).set({ cheater, data, uid, username: token.name })
-      } else {
-        return Promise.resolve()
-      }
-    })
-    .then(() => {
-      // Save score
-      if (!prevScore || prevScore.score < score) {
-        const newScore = {
-          // Once a cheater, always a cheater
-          cheater: prevScore ? prevScore.cheater || cheater : cheater,
-          score,
-          uid,
-          displayName: username,
-          picture: token.picture,
-          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+  return (
+    admin
+      .auth()
+      .getUser(uid)
+      .then((result) => {
+        username = result.displayName
+        return scoresRef.doc(uid).get()
+      })
+      .then((doc) => {
+        prevScore = doc.data()
+        // Save cheaters
+        if (cheater) {
+          return cheatersRef.doc(uid).set({ cheater, data, uid, username: token.name })
         }
-        return scoresRef.doc(uid).set(newScore)
-      } else {
-        return Promise.resolve()
-      }
-    })
-    .then(() => Promise.resolve({ message: 'done' }))
+        return Promise.resolve(prevScore)
+      })
+      // @ts-ignore
+      .then(() => {
+        // Save score
+        if (!prevScore || prevScore.score < score) {
+          const newScore = {
+            // Once a cheater, always a cheater
+            cheater: prevScore ? prevScore.cheater || cheater : cheater,
+            score,
+            uid,
+            displayName: username,
+            picture: token.picture,
+            timestamp: admin.firestore.Timestamp.now(),
+          }
+          return scoresRef.doc(uid).set(newScore)
+        } else {
+          return Promise.resolve()
+        }
+      })
+      .then(() => Promise.resolve({ message: 'done' }))
+  )
 })
 
 function xor(text: string, key: string) {

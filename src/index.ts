@@ -21,16 +21,18 @@ window.setScore = function setScore(score: number) {
   scoreEl.innerText = String(score)
 }
 
-window.saveScore = function saveScore(score: number) {
+window.saveScore = function saveScore(gameImage: string, score: number) {
   if (!state.user) {
     // TODO: prompt the user to sign in with twitter
-    // TODO: save in local storage
+    // TODO: save in local storage?
+    console.log('No user. Sign in to save score')
     return
   }
 
-  if (score > state.score.score) {
-    processScore(score).then(console.log).catch(console.error)
-  }
+  // if (!state.score.score || score > state.score.score) {
+  console.log('saving score...')
+  processScore([gameImage, score]).then(console.log).catch(console.error)
+  // }
 }
 
 // Current User

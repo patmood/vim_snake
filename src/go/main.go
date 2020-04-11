@@ -113,8 +113,7 @@ func updateGame(gs *gameState) {
 	for i := 0; i < len(gs.snake); i++ {
 		if gs.snake[i].x == newHead.x && gs.snake[i].y == newHead.y {
 			// Game over man, game over.
-			encScore := xor("0000"+strconv.Itoa(gs.score), ScoreSecret)
-			window.Call("saveScore", encScore)
+			saveScore(gs)
 			resetGame(gs)
 			return
 		}
@@ -127,18 +126,17 @@ func updateGame(gs *gameState) {
 		gs.score = gs.score + scoreStep
 		spawnFood(gs)
 
-		// START REMOVE ME
-		encScore := xor("0000"+strconv.Itoa(gs.score), ScoreSecret)
-		go log(encScore, gs.score)
-		window.Call("saveScore", encScore)
-		// END REMOVE ME
-
 		window.Call("setScore", gs.score)
 	} else {
 		// Remove tail (first element) if no food
 		gs.snake = gs.snake[1:]
 	}
+}
 
+func saveScore(gs *gameState) {
+	gameImage := canvas.Call("toDataURL")
+	encScore := xor("000000"+strconv.Itoa(gs.score), ScoreSecret)
+	window.Call("saveScore", gameImage, encScore)
 }
 
 func spawnFood(gs *gameState) {

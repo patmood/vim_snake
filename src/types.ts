@@ -2,7 +2,7 @@ declare global {
   interface Window {
     state: State
     setScore: (score: number) => void
-    saveScore: (score: number) => void
+    saveScore: (gameImage: string, score: number) => void
   }
 }
 

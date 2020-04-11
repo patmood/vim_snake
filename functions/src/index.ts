@@ -10,9 +10,11 @@ export const processScore = functions.https.onCall((data, context) => {
     )
   }
 
+  const [gameImage, encryptedScore] = data
+
   const { uid, token } = context.auth
   const secret = functions.config().score.secret
-  const unencryptedScore = xor(data, secret)
+  const unencryptedScore = xor(encryptedScore, secret)
   const score = parseInt(unencryptedScore)
 
   let cheater = Number.isNaN(score)
@@ -35,7 +37,7 @@ export const processScore = functions.https.onCall((data, context) => {
         prevScore = doc.data()
         // Save cheaters
         if (cheater) {
-          return cheatersRef.doc(uid).set({ cheater, data, uid, username: token.name })
+          return cheatersRef.doc(uid).set({ cheater, encryptedScore, uid, username: token.name })
         }
         return Promise.resolve(prevScore)
       })
@@ -51,6 +53,7 @@ export const processScore = functions.https.onCall((data, context) => {
             displayName: username,
             picture: token.picture,
             timestamp: admin.firestore.Timestamp.now(),
+            gameImage,
           }
           return scoresRef.doc(uid).set(newScore)
         } else {

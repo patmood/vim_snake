@@ -12,6 +12,7 @@ const renderLeaderboard = template(
     <th>Score</th>
     <th>Who</th>
     <th>When</th>
+    <th>How</th>
   </thead>
   <tbody>
     <% scores.forEach((score, i) => { %>
@@ -32,6 +33,11 @@ const renderLeaderboard = template(
               new Date(score.timestamp.seconds * 1000),
               { addSuffix: true }) %>
           </p>
+        </td>
+        <td>
+          <div class="leaders-gamethumb">
+            <img src="<%= score.gameImage %>" />
+          </div>
         </td>
       </tr>
     <% } )%>

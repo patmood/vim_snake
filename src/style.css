@@ -101,6 +101,11 @@ a:visited {
   border: none;
   border-collapse: collapse;
 }
+.leaders td,
+.leaders th {
+  padding: 1rem;
+  text-align: center;
+}
 .leaders-namewrapper {
   display: flex;
   align-items: center;
@@ -109,8 +114,19 @@ a:visited {
   border-radius: 50em;
   margin-right: 1rem;
 }
-.leaders td,
-.leaders th {
-  padding: 1rem;
-  text-align: center;
+.leaders-gamethumb {
+  width: 50px;
+  height: 50px;
+  position: relative;
+}
+.leaders-gamethumb img {
+  max-width: 100%;
+  border: 1px solid #00cc00;
+}
+.leaders-gamethumb:hover img {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 300px;
+  max-width: initial;
 }

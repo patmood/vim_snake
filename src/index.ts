@@ -1,6 +1,7 @@
 import { wasmLoader } from './wasm-loader'
 import { firebase, db, functions } from './firebase'
 import { State } from './types'
+import './leaderboard'
 
 // Load the game
 wasmLoader('main.wasm')
@@ -12,7 +13,6 @@ let state: State = {}
 const signinEl = document.getElementById('signin')
 const scoreEl = document.getElementById('score')
 const topScoreEl = document.getElementById('topScore')
-const twitterBtn = document.getElementById('twitter')
 
 const processScore = functions.httpsCallable('processScore')
 
@@ -48,6 +48,7 @@ firebase.auth().onAuthStateChanged((user) => {
 
 // Twitter login
 const provider = new firebase.auth.TwitterAuthProvider()
+const twitterBtn = document.getElementById('twitter')
 twitterBtn.addEventListener('click', () => {
   firebase
     .auth()

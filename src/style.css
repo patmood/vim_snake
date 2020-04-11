@@ -23,6 +23,10 @@ h1 {
   font-size: 42px;
 }
 
+.white {
+  color: white;
+}
+
 .header,
 .footer {
   text-align: center;
@@ -84,4 +88,20 @@ a:visited {
 }
 .button:visited {
   color: #000;
+}
+
+#leaders {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Leaderboard */
+.leaders {
+  border: none;
+  border-collapse: collapse;
+}
+.leaders-namewrapper {
+  display: flex;
+  align-items: center;
 }

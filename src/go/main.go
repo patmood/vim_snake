@@ -113,7 +113,7 @@ func updateGame(gs *gameState) {
 	for i := 0; i < len(gs.snake); i++ {
 		if gs.snake[i].x == newHead.x && gs.snake[i].y == newHead.y {
 			// Game over man, game over.
-			encScore := xor(strconv.Itoa(gs.score), ScoreSecret)
+			encScore := xor("0000"+strconv.Itoa(gs.score), ScoreSecret)
 			window.Call("saveScore", encScore)
 			resetGame(gs)
 			return
@@ -128,7 +128,7 @@ func updateGame(gs *gameState) {
 		spawnFood(gs)
 
 		// START REMOVE ME
-		encScore := xor(strconv.Itoa(gs.score), ScoreSecret)
+		encScore := xor("0000"+strconv.Itoa(gs.score), ScoreSecret)
 		go log(encScore, gs.score)
 		window.Call("saveScore", encScore)
 		// END REMOVE ME

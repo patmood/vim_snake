@@ -35,8 +35,6 @@ window.saveScore = function saveScore(score: number) {
 
 // Current User
 firebase.auth().onAuthStateChanged((user) => {
-  console.log(`User state changed`)
-  console.log(user && user.displayName)
   if (user) {
     // User is signed in.
     signinEl.classList.add('hidden')
@@ -61,5 +59,4 @@ twitterBtn.addEventListener('click', () => {
           .currentUser.updateProfile({ displayName: result.additionalUserInfo.username })
       }
     })
-    .then(() => console.log('saved'))
 })

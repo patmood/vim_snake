@@ -53,7 +53,7 @@ export const processScore = functions.https.onCall((data, context) => {
           uid,
           displayName: username,
           picture: token.picture,
-          timestamp: admin.database.ServerValue.TIMESTAMP,
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
         }
         return scoresRef.doc(uid).set(newScore)
       } else {

@@ -16,6 +16,7 @@ To deploy firebase function:
 
 ## TODO
 
+[] Watch scores from db (personal and leaderboard)
 [] Handle un authenticated users top score
 [] Only make request if user top score (see processScore in index.js)
 [] Only savescore from go if top (see "REMOVE" comments)

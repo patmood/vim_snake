@@ -7,16 +7,19 @@ declare global {
 }
 
 export interface State {
-  user?: UserDoc
+  user?: User
 }
 
-export interface UserDoc {
+export interface User {
   displayName: string
   photoURL: string
   uid: string
-  username: string
-  topScore?: {
-    timestamp: number
-    score: number
-  }
+}
+
+export interface Score {
+  cheater: boolean
+  uid: string
+  score: number
+  name: string
+  picture: string
 }

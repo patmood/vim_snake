@@ -128,8 +128,8 @@ func updateGame(gs *gameState) {
 		spawnFood(gs)
 
 		// START REMOVE ME
-		go log(strconv.Itoa(gs.score))
 		encScore := xor(strconv.Itoa(gs.score), ScoreSecret)
+		go log(encScore, gs.score)
 		window.Call("saveScore", encScore)
 		// END REMOVE ME
 

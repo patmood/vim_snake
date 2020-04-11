@@ -19,17 +19,21 @@ const processScore = functions.httpsCallable('processScore')
 // Expose functions to call from Go
 window.setScore = function setScore(score: number) {
   scoreEl.innerText = String(score)
+  const prevTopScore = parseInt(topScoreEl.innerText)
+  if (score > prevTopScore) {
+    topScoreEl.innerText = String(score)
+  }
 }
 
 window.saveScore = function saveScore(gameImage: string, score: number) {
   if (!state.user) {
     // TODO: prompt the user to sign in with twitter
-    // TODO: save in local storage?
     console.log('No user. Sign in to save score')
     return
   }
 
-  if (!state.score.score || score > state.score.score) {
+  const prevTopScore = state.score?.score
+  if (!prevTopScore || score > prevTopScore) {
     console.log('saving score...')
     processScore([gameImage, score]).then(console.log).catch(console.error)
   }
@@ -47,8 +51,10 @@ firebase.auth().onAuthStateChanged((user) => {
       .doc(user.uid)
       .onSnapshot((doc) => {
         const score = doc.data() as Score
-        state = { ...state, score }
-        topScoreEl.innerText = String(score.score)
+        if (score) {
+          state = { ...state, score }
+          topScoreEl.innerText = String(score.score)
+        }
       })
   } else {
     // show signin button

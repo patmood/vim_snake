@@ -1,6 +1,6 @@
 import { wasmLoader } from './wasm-loader'
 import { firebase, db, functions } from './firebase'
-import { State } from './types'
+import { State, Score } from './types'
 import './leaderboard'
 
 // Load the game
@@ -28,9 +28,9 @@ window.saveScore = function saveScore(score: number) {
     return
   }
 
-  // if (score > state.userScore.score) {
-  processScore(score).then(console.log).catch(console.error)
-  // }
+  if (score > state.score.score) {
+    processScore(score).then(console.log).catch(console.error)
+  }
 }
 
 // Current User
@@ -38,8 +38,16 @@ firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     // User is signed in.
     signinEl.classList.add('hidden')
-    const { displayName, photoURL, uid } = user
-    state = { ...state, user: { displayName, photoURL, uid } }
+    state = { ...state, user }
+
+    // Update User Top Score
+    db.collection('scores')
+      .doc(user.uid)
+      .onSnapshot((doc) => {
+        const score = doc.data() as Score
+        state = { ...state, score }
+        topScoreEl.innerText = String(score.score)
+      })
   } else {
     // show signin button
     signinEl.classList.remove('hidden')

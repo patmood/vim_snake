@@ -10,8 +10,8 @@ const renderLeaderboard = template(
   <thead>
     <th>Rank</th>
     <th>Score</th>
-    <th>Name</th>
-    <th></th>
+    <th>Who</th>
+    <th>When</th>
   </thead>
   <tbody>
     <% scores.forEach((score, i) => { %>
@@ -19,11 +19,19 @@ const renderLeaderboard = template(
         <td><%= i + 1 %></td>
         <td><%= score.score %></td>
         <td>
-          <div class="leaders-namewrapper">
-            <div><img src="<%= score.picture %>" /></div>
-            <div>@<%= score.displayName %></div>
-          </div>
-          <div title="<%= new Date(score.timestamp.seconds * 1000) %>"><%= formatDistanceToNow(new Date(score.timestamp.seconds * 1000), { addSuffix: true }) %></div>
+          <a class="leaders-namewrapper" href="https://twitter.com/<%= score.displayName %>" target="_blank">
+            <img class="leaders-avatar" src="<%= score.picture %>" />
+            <div>
+              @<%= score.displayName %>
+            </div>
+          </a>
+        </td>
+        <td>
+          <p title="<%= new Date(score.timestamp.seconds * 1000) %>">
+            <%= formatDistanceToNow(
+              new Date(score.timestamp.seconds * 1000),
+              { addSuffix: true }) %>
+          </p>
         </td>
       </tr>
     <% } )%>
@@ -41,6 +49,5 @@ db.collection('scores')
     querySnapshot.forEach((doc) => {
       scores.push(doc.data() as Score)
     })
-    console.log({ scores })
     leaderEl.innerHTML = renderLeaderboard({ scores })
   })

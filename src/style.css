@@ -105,3 +105,12 @@ a:visited {
   display: flex;
   align-items: center;
 }
+.leaders-avatar {
+  border-radius: 50em;
+  margin-right: 1rem;
+}
+.leaders td,
+.leaders th {
+  padding: 1rem;
+  text-align: center;
+}

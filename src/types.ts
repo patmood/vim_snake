@@ -8,6 +8,7 @@ declare global {
 
 export interface State {
   user?: User
+  score?: Score
 }
 
 export interface User {

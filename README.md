@@ -4,15 +4,23 @@ Vim Snake written in Go and compiled to Web Assembly
 
 ## Development
 
+### Front end
+
 Create a .env file with environment variables shown in .env_example
 
-`yarn start`
+`yarn build` single build or `yarn start`for development
 
-To deploy firebase function:
+### WASM Code
+
+`make` to build (also watched and built by `yarn start`)
+
+### Firebase functions
+
+Set environment vars:
 
 `firebase functions:config:set score.secret="same secret as in .env"`
 
-`cd functions` then `yarn deploy`
+`cd functions` then `yarn deploy` to deploy
 
 ## TODO
 

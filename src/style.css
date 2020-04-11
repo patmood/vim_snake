@@ -23,10 +23,15 @@ h1 {
   font-size: 42px;
 }
 
+.white {
+  color: white;
+}
+
 .header,
 .footer {
   text-align: center;
   margin-bottom: 1rem;
+  font-size: 0.9rem;
 }
 
 .wrapper {
@@ -35,13 +40,28 @@ h1 {
   justify-content: center;
 }
 
+.score-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .game-container {
   padding: 1rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.center {
+  text-align: center;
 }
 
 .instructions {
   padding: 1rem;
   flex: 1;
+  max-width: 500px;
 }
 
 a {
@@ -58,10 +78,55 @@ a:visited {
   display: block;
   margin: 10px;
   text-align: center;
+  font-family: inherit;
+  border: none;
+  font-size: inherit;
+  cursor: pointer;
 }
 .button a {
   color: #000;
 }
 .button:visited {
   color: #000;
+}
+
+#leaders {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Leaderboard */
+.leaders {
+  border: none;
+  border-collapse: collapse;
+}
+.leaders td,
+.leaders th {
+  padding: 1rem;
+  text-align: center;
+}
+.leaders-namewrapper {
+  display: flex;
+  align-items: center;
+}
+.leaders-avatar {
+  border-radius: 50em;
+  margin-right: 1rem;
+}
+.leaders-gamethumb {
+  width: 50px;
+  height: 50px;
+  position: relative;
+}
+.leaders-gamethumb img {
+  max-width: 100%;
+  border: 1px solid #00cc00;
+}
+.leaders-gamethumb:hover img {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 300px;
+  max-width: initial;
 }

@@ -4,15 +4,29 @@ Vim Snake written in Go and compiled to Web Assembly
 
 ## Development
 
-Build on changes `fswatch -o ./main.go | xargs -n1 -I{} make`
+### Front end
+
+Create a .env file with environment variables shown in .env_example
+
+`yarn build` single build or `yarn start`for development
+
+### WASM Code
+
+`make` to build (also watched and built by `yarn start`)
+
+### Firebase functions
+
+Set environment vars:
+
+`firebase functions:config:set score.secret="same secret as in .env"`
+
+`cd functions` then `yarn deploy` to deploy
 
 ## TODO
 
-[] Test live
-
-## Notes
-
-Useful references:
-
-- https://marianogappa.github.io/software/2020/04/01/webassembly-tinygo-cheesse/
-- https://github.com/olso/go-wasm-cat-game-on-canvas-with-docker
+[] Watch scores from db (personal and leaderboard)
+[] Handle un authenticated users top score
+[] Only make request if user top score (see processScore in index.js)
+[] Only savescore from go if top (see "REMOVE" comments)
+[] Show "i" to eat food when running over food
+[] canvas image to base 64 and save

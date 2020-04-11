@@ -8,34 +8,47 @@
   </head>
   <body>
     <header class="header">
-      <h1>Snake Vim Trainer</h1>
-      <h2>Hone your vim navigation skills</h2>
+      <h1>Vim Snake</h1>
+      <h2>Practice (and show off) your vim skills playing snake</h2>
     </header>
     <main id="wasm">
       <section class="wrapper">
         <div class="game-container">
           <div id="game"></div>
-          <p>Score: <span id="score"></span></p>
+          <div class="score-container">
+            <p>Score: <span id="score"></span></p>
+            <p>Your Best: <span id="topScore">0</span></p>
+          </div>
         </div>
 
         <div class="instructions">
           <h2>Instructions</h2>
-          <p>Make your Vim snake eat the food to increase your score.</p>
-          <p>You can only eat food while INSERT mode is on.</p>
-          <p>You cannot change direction while INSERT mode is on</p>
+          <p>You can only eat food while <span class="white">INSERT</span> mode is on.</p>
+          <p>
+            You cannot change direction in
+            <span class="white">INSERT</span> mode
+          </p>
           <p>Controls:</p>
           <ul>
-            <li>Left: h</li>
-            <li>Down: j</li>
-            <li>Up: k</li>
-            <li>Right: l</li>
-            <li>Insert mode: i</li>
+            <li>Move: h j k l</li>
+            <li><span class="white">INSERT</span> mode: i</li>
             <li>Normal mode: esc</li>
           </ul>
+          <div id="signin" class="hidden">
+            <p>Sign in to save your score!</p>
+            <button id="twitter" class="button">
+              Sign in with Twitter
+            </button>
+          </div>
         </div>
       </section>
+      <section id="leaders"></section>
       <footer class="footer">
-        Built by <a href="http://patmoody.com" target="_blank">Patrick Moody</a>
+        <p>Built by @patmood</p>
+        <p>
+          <a href="https://twitter.com/patmood" target="_blank">twitter</a>
+          <a href="https://github.com/patmood/vim_snake/" target="_blank">github</a>
+        </p>
       </footer>
     </main>
     <script src="index.ts"></script>

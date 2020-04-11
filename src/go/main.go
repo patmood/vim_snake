@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/rand"
+	"strconv"
 	"syscall/js"
 	"time"
 )
@@ -31,6 +32,10 @@ const canvasSize int = 50
 const scoreStep int = 125
 const gameSpeed int = 100
 const primaryColor string = "#00CC00"
+const headColor string = "#00a400"
+
+// Filled by build flag
+var ScoreSecret string
 
 var (
 	gameWidth                           = cellSize * canvasSize
@@ -42,7 +47,6 @@ var (
 )
 
 func main() {
-	loop := 0
 	runGameForever := make(chan bool)
 
 	s1 := rand.NewSource(time.Now().UnixNano())
@@ -64,10 +68,6 @@ func main() {
 	renderer = js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		updateGame(&gs)
 		render(&gs)
-		loop = loop + 1
-		if loop < 300 {
-			// 	window.Call("requestAnimationFrame", renderer)
-		}
 		return nil
 	})
 
@@ -113,6 +113,7 @@ func updateGame(gs *gameState) {
 	for i := 0; i < len(gs.snake); i++ {
 		if gs.snake[i].x == newHead.x && gs.snake[i].y == newHead.y {
 			// Game over man, game over.
+			saveScore(gs)
 			resetGame(gs)
 			return
 		}
@@ -123,13 +124,41 @@ func updateGame(gs *gameState) {
 	// Check for food
 	if gs.insertMode && newHead.x == gs.food.x && newHead.y == gs.food.y {
 		gs.score = gs.score + scoreStep
-		gs.food = point{x: randomInstance.Intn(canvasSize), y: randomInstance.Intn(canvasSize)}
+		spawnFood(gs)
+
 		window.Call("setScore", gs.score)
 	} else {
 		// Remove tail (first element) if no food
 		gs.snake = gs.snake[1:]
 	}
+}
 
+func saveScore(gs *gameState) {
+	gameImage := canvas.Call("toDataURL")
+	encScore := xor("000000"+strconv.Itoa(gs.score), ScoreSecret)
+	window.Call("saveScore", gameImage, encScore)
+}
+
+func spawnFood(gs *gameState) {
+	var newFood point
+	inSnake := true
+
+	for inSnake {
+		newFood = point{x: randomInstance.Intn(canvasSize), y: randomInstance.Intn(canvasSize)}
+		inSnake = isPointInSnake(gs.snake, newFood)
+	}
+
+	gs.food = newFood
+
+}
+
+func isPointInSnake(snake []point, p point) bool {
+	for _, snakeCell := range snake {
+		if snakeCell.x == p.x && snakeCell.y == p.y {
+			return true
+		}
+	}
+	return false
 }
 
 func render(gs *gameState) {
@@ -140,8 +169,11 @@ func render(gs *gameState) {
 
 	// Draw snake
 	for i := 0; i < len(gs.snake); i++ {
-		// go log("snakeX:", gs.snake[i].x, "snakeY:", gs.snake[i].y)
-		paintCell(gs.snake[i].x, gs.snake[i].y, primaryColor)
+		if i == len(gs.snake)-1 {
+			paintCell(gs.snake[i].x, gs.snake[i].y, headColor)
+		} else {
+			paintCell(gs.snake[i].x, gs.snake[i].y, primaryColor)
+		}
 	}
 
 	// Draw insert mode text
@@ -244,4 +276,13 @@ func resetGame(gs *gameState) {
 // ...interface{} is more or less `any` from Typescript
 func log(args ...interface{}) {
 	window.Get("console").Call("log", args...)
+}
+
+// Simple encryption
+func xor(input, key string) (output string) {
+	for i := 0; i < len(input); i++ {
+		output += string(input[i] ^ key[i%len(key)])
+	}
+
+	return output
 }

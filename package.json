@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "parcel ./src/index.html & watch make ./src/go",
-    "build": "parcel build ./src/index.html && make"
+    "build": "parcel build ./src/index.html"
   },
   "staticFiles": {
     "staticPath": "static",

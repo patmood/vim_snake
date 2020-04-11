@@ -29,10 +29,10 @@ window.saveScore = function saveScore(gameImage: string, score: number) {
     return
   }
 
-  // if (!state.score.score || score > state.score.score) {
-  console.log('saving score...')
-  processScore([gameImage, score]).then(console.log).catch(console.error)
-  // }
+  if (!state.score.score || score > state.score.score) {
+    console.log('saving score...')
+    processScore([gameImage, score]).then(console.log).catch(console.error)
+  }
 }
 
 // Current User

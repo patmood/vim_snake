@@ -1,6 +1,8 @@
 # WASM Snake
 
-Vim Snake written in Go and compiled to Web Assembly
+Vim Snake 2.0 is written in Go and compiled to Web Assembly.
+
+I originally built this site in 2013 using my extremely limited knowledge of javascript and ruby/sinatra. It was trivial to cheat and so the leaderboard was meaningless. This rewrite fixes those issues and taught me a bunch about new web technologies.
 
 ## Development
 
@@ -24,9 +26,5 @@ Set environment vars:
 
 ## TODO
 
-[] Watch scores from db (personal and leaderboard)
-[] Handle un authenticated users top score
-[] Only make request if user top score (see processScore in index.js)
-[] Only savescore from go if top (see "REMOVE" comments)
-[] Show "i" to eat food when running over food
-[] canvas image to base 64 and save
+- Add `ctrl + [` keybinding for insert mode
+- Show "i" to eat food when running over food

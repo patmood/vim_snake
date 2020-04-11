@@ -5,21 +5,34 @@ admin.initializeApp()
 export const processScore = functions.https.onCall((data, context) => {
   if (!context.auth || !context.auth.uid) return
 
+  const { uid } = context.auth
   const secret = functions.config().score.secret
   const unencryptedScore = xor(data, secret)
-  const originalScore = parseInt(unencryptedScore)
+  const score = parseInt(unencryptedScore)
 
-  const cheater = Number.isNaN(originalScore)
+  const cheater = Number.isNaN(score)
 
-  return admin
-    .firestore()
-    .collection('users')
-    .doc(context.auth.uid)
-    .update({
-      topScore: {
-        score: originalScore,
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
-      },
+  const cheatersRef = admin.firestore().collection('cheaters')
+  const scoresRef = admin.firestore().collection('scores')
+  const usersRef = admin.firestore().collection('users')
+
+  if (cheater) {
+    return cheatersRef.doc(uid).set({ cheater, data })
+  }
+
+  return scoresRef
+    .doc()
+    .set({
+      userUid: uid,
+      score: score,
+    })
+    .then((_: any) => {
+      return usersRef.doc(uid).update({
+        topScore: {
+          score,
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        },
+      })
     })
 })
 

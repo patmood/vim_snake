@@ -39,6 +39,7 @@ firebase.auth().onAuthStateChanged((user) => {
     signinEl.classList.add('hidden')
     db.doc(`users/${user.uid}`).onSnapshot((doc) => {
       const userDoc = doc.data() as UserDoc
+      console.log({ userDoc })
       state = { ...state, user: { ...userDoc } }
       topScoreEl.innerText = String(userDoc.topScore ? userDoc.topScore.score : 0)
     })

@@ -136,7 +136,7 @@ func updateGame(gs *gameState) {
 func saveScore(gs *gameState) {
 	gameImage := canvas.Call("toDataURL")
 	encScore := xor("000000"+strconv.Itoa(gs.score), ScoreSecret)
-	window.Call("saveScore", gameImage, encScore)
+	window.Call("saveScore", gameImage, encScore, gs.score)
 }
 
 func spawnFood(gs *gameState) {

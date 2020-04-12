@@ -20,7 +20,7 @@ const processScore = functions.httpsCallable('processScore')
 window.setScore = function setScore(score: number) {
   scoreEl.innerText = String(score)
   const prevTopScore = parseInt(topScoreEl.innerText)
-  if (score > prevTopScore) {
+  if (score >= prevTopScore) {
     topScoreEl.innerText = String(score)
   }
 }

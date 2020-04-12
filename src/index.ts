@@ -19,20 +19,20 @@ const processScore = functions.httpsCallable('processScore')
 // Expose functions to call from Go
 window.setScore = function setScore(score: number) {
   scoreEl.innerText = String(score)
-  const prevTopScore = parseInt(topScoreEl.innerText)
-  if (score >= prevTopScore) {
-    topScoreEl.innerText = String(score)
-  }
 }
 
 window.saveScore = function saveScore(gameImage: string, score: number) {
+  const prevTopScore = state.score?.score || parseInt(topScoreEl.innerText)
+  if (score > prevTopScore) {
+    topScoreEl.innerText = String(score)
+  }
+
   if (!state.user) {
     // TODO: prompt the user to sign in with twitter
     console.log('No user. Sign in to save score')
     return
   }
 
-  const prevTopScore = state.score?.score
   if (!prevTopScore || score > prevTopScore) {
     console.log('saving score...')
     processScore([gameImage, score]).then(console.log).catch(console.error)

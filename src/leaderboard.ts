@@ -49,6 +49,7 @@ const renderLeaderboard = template(
 
 db.collection('scores')
   .orderBy('score', 'desc')
+  .where('cheater', '==', false)
   .limit(10)
   .onSnapshot((querySnapshot: firebase.firestore.QuerySnapshot) => {
     const scores: Score[] = []

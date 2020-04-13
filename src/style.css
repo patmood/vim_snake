@@ -101,9 +101,12 @@ a:visited {
   border: none;
   border-collapse: collapse;
 }
+.leaders p {
+  margin: 0;
+}
 .leaders td,
 .leaders th {
-  padding: 1rem;
+  padding: 0.5rem;
   text-align: center;
 }
 .leaders-namewrapper {
@@ -113,6 +116,7 @@ a:visited {
 .leaders-avatar {
   border-radius: 50em;
   margin-right: 1rem;
+  max-width: 30px;
 }
 .leaders-gamethumb {
   width: 50px;

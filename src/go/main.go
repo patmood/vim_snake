@@ -1,8 +1,8 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
-	"strconv"
 	"syscall/js"
 	"time"
 )
@@ -125,7 +125,6 @@ func updateGame(gs *gameState) {
 	if gs.insertMode && newHead.x == gs.food.x && newHead.y == gs.food.y {
 		gs.score = gs.score + scoreStep
 		spawnFood(gs)
-
 		window.Call("setScore", gs.score)
 	} else {
 		// Remove tail (first element) if no food
@@ -134,9 +133,11 @@ func updateGame(gs *gameState) {
 }
 
 func saveScore(gs *gameState) {
-	gameImage := canvas.Call("toDataURL")
-	encScore := xor("000000"+strconv.Itoa(gs.score), ScoreSecret)
-	window.Call("saveScore", gameImage, encScore, gs.score)
+	gameImage := canvas.Call("toDataURL").String()
+	scoreString := fmt.Sprintf("%010d", gs.score) + gameImage
+
+	encScore := xor(scoreString, ScoreSecret)
+	window.Call("saveScore", encScore, gs.score)
 }
 
 func spawnFood(gs *gameState) {
@@ -283,6 +284,5 @@ func xor(input, key string) (output string) {
 	for i := 0; i < len(input); i++ {
 		output += string(input[i] ^ key[i%len(key)])
 	}
-
 	return output
 }

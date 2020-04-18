@@ -21,8 +21,9 @@ window.setScore = function setScore(score: number) {
   scoreEl.innerText = String(score)
 }
 
-window.saveScore = function saveScore(gameImage: string, meta: string, score: number) {
+window.saveScore = function saveScore(meta: string, score: number) {
   const prevTopScore = state.score?.score || parseInt(topScoreEl.innerText)
+
   if (score > prevTopScore) {
     topScoreEl.innerText = String(score)
   }
@@ -35,7 +36,7 @@ window.saveScore = function saveScore(gameImage: string, meta: string, score: nu
 
   if (!prevTopScore || score > prevTopScore) {
     console.log('saving score...')
-    processScore([gameImage, meta]).then(console.log).catch(console.error)
+    processScore([meta]).then(console.log).catch(console.error)
   }
 }
 

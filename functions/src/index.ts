@@ -10,47 +10,41 @@ export const processScore = functions.https.onCall((data, context) => {
     )
   }
 
-  const [gameImage, encryptedScore] = data
+  const [encryptedMeta] = data
+  const secret = functions.config().score.secret
+  const decryptedMeta = xor(encryptedMeta, secret)
+  const gameImage = decryptedMeta.slice(10)
+  const unencryptedScore = decryptedMeta.slice(0, 10)
 
   const { uid, token } = context.auth
-  const secret = functions.config().score.secret
-  const unencryptedScore = xor(encryptedScore, secret)
+
   const score = parseInt(unencryptedScore)
+  const cheater = Number.isNaN(score)
 
-  let cheater = Number.isNaN(score)
-
-  const cheatersRef = admin.firestore().collection('cheaters')
   const scoresRef = admin.firestore().collection('scores')
 
   let prevScore: any
-  let username: any
+  let displayName: string | undefined
 
   return (
     admin
       .auth()
       .getUser(uid)
       .then((result) => {
-        username = result.displayName
+        displayName = result.displayName
         return scoresRef.doc(uid).get()
       })
-      .then((doc) => {
-        prevScore = doc.data()
-        // Save cheaters
-        if (cheater) {
-          return cheatersRef.doc(uid).set({ cheater, encryptedScore, uid, username: token.name })
-        }
-        return Promise.resolve(prevScore)
-      })
       // @ts-ignore
-      .then(() => {
+      .then((scoreDoc) => {
+        prevScore = scoreDoc.data()
         // Save score
-        if (!prevScore || prevScore.score < score) {
+        if (cheater || score > (prevScore?.score || 0)) {
           const newScore = {
             // Once a cheater, always a cheater
-            cheater: prevScore ? prevScore.cheater || cheater : cheater,
-            score,
+            cheater: prevScore?.cheater || cheater,
+            score: Math.max(prevScore?.score || 0, score),
             uid,
-            displayName: username,
+            displayName,
             picture: token.picture,
             timestamp: admin.firestore.Timestamp.now(),
             gameImage,

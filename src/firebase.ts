@@ -5,7 +5,7 @@ import 'firebase/functions'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAGjolOOMybJWkMzNwWanw-Z7In_V40hj0',
-  authDomain: 'vimsnake.firebaseapp.com',
+  authDomain: 'vimsnake.com',
   databaseURL: 'https://vimsnake.firebaseio.com',
   projectId: 'vimsnake',
   storageBucket: 'vimsnake.appspot.com',

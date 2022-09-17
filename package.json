@@ -9,16 +9,11 @@
     "start": "parcel ./src/index.html & watch make ./src/go",
     "build": "parcel build ./src/index.html"
   },
-  "staticFiles": {
-    "staticPath": "static",
-    "watcherGlob": "**"
-  },
   "browserslist": [
     "last 1 Chrome versions"
   ],
   "devDependencies": {
     "parcel": "^1.12.4",
-    "parcel-plugin-static-files-copy": "^2.3.1",
     "typescript": "^3.8.3",
     "watch": "^1.0.2"
   },

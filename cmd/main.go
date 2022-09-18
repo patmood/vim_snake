@@ -11,7 +11,10 @@ func main() {
 	app := pocketbase.New()
 
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
+
+		// Static file server for the website
 		e.Router.Static("", "dist")
+
 		// e.Router.AddRoute(echo.Route{
 		// 	Method: http.MethodGet,
 		// 	Path:   "/",

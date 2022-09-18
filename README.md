@@ -6,6 +6,10 @@ I originally built this site in 2013 using my extremely limited knowledge of jav
 
 ## Development
 
+### Run the server
+
+`go run cmd/main.go serve`
+
 ### Front end
 
 Create a .env file with environment variables shown in .env_example

@@ -16,19 +16,12 @@ const signinEl = document.getElementById("signin")
 const scoreEl = document.getElementById("score")
 const topScoreEl = document.getElementById("topScore")
 
-const processScore = functions.httpsCallable("processScore")
-
 // Expose functions to call from Go
 window.setScore = function setScore(score: number) {
   scoreEl.innerText = String(score)
 }
 
-window.saveScore = function saveScore(
-  meta: string,
-  score: number,
-  gameImage: string
-) {
-  console.log({ meta, gameImage })
+window.saveScore = function saveScore(meta: string, score: number) {
   const prevTopScore = state.score?.score || parseInt(topScoreEl.innerText)
 
   if (score > prevTopScore) {
@@ -43,7 +36,6 @@ window.saveScore = function saveScore(
 
   if (!prevTopScore || score > prevTopScore) {
     console.log("saving score...")
-    // processScore([meta]).then(console.log).catch(console.error)
     const formData = new FormData()
     formData.append("meta", meta)
     formData.append("score", String(score))

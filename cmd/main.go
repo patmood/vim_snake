@@ -1,6 +1,9 @@
 package main
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
+	"encoding/base64"
 	"fmt"
 	"log"
 	"net/http"
@@ -67,7 +70,11 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 		timestamp := time.Now()
 
 		cheater := false
-		unencrypted := xor(meta, secret)
+		unencrypted, err1 := Decrypt(meta, secret)
+		if err1 != nil {
+			rest.NewBadRequestError("decryption failed", err1)
+		}
+
 		gameImage := unencrypted[10:]
 		actualScore := strings.TrimLeft(unencrypted[:10], "0")
 		if sentScore != actualScore {
@@ -94,10 +101,43 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 	}, nil
 }
 
-// Simple encryption
-func xor(input, key string) (output string) {
-	for i := 0; i < len(input); i++ {
-		output += string(input[i] ^ key[i%len(key)])
+// Encryption code
+// ==============================
+var bytes = []byte{35, 46, 57, 24, 85, 35, 24, 74, 87, 35, 88, 98, 66, 32, 14, 05}
+
+func Encode(b []byte) string {
+	return base64.StdEncoding.EncodeToString(b)
+}
+func Decode(s string) []byte {
+	data, err := base64.StdEncoding.DecodeString(s)
+	if err != nil {
+		panic(err)
 	}
-	return output
+	return data
+}
+
+// Encrypt method is to encrypt or hide any classified text
+func Encrypt(text, MySecret string) (string, error) {
+	block, err := aes.NewCipher([]byte(MySecret))
+	if err != nil {
+		return "", err
+	}
+	plainText := []byte(text)
+	cfb := cipher.NewCFBEncrypter(block, bytes)
+	cipherText := make([]byte, len(plainText))
+	cfb.XORKeyStream(cipherText, plainText)
+	return Encode(cipherText), nil
+}
+
+// Decrypt method is to extract back the encrypted text
+func Decrypt(text, MySecret string) (string, error) {
+	block, err := aes.NewCipher([]byte(MySecret))
+	if err != nil {
+		return "", err
+	}
+	cipherText := Decode(text)
+	cfb := cipher.NewCFBDecrypter(block, bytes)
+	plainText := make([]byte, len(cipherText))
+	cfb.XORKeyStream(plainText, cipherText)
+	return string(plainText), nil
 }

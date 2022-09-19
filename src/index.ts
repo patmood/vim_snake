@@ -23,22 +23,37 @@ window.setScore = function setScore(score: number) {
   scoreEl.innerText = String(score)
 }
 
-window.saveScore = function saveScore(meta: string, score: number) {
+window.saveScore = function saveScore(
+  meta: string,
+  score: number,
+  gameImage: string
+) {
+  console.log({ meta, gameImage })
   const prevTopScore = state.score?.score || parseInt(topScoreEl.innerText)
 
   if (score > prevTopScore) {
     topScoreEl.innerText = String(score)
   }
 
-  if (!state.user) {
-    // TODO: prompt the user to sign in with twitter
-    console.log("No user. Sign in to save score")
-    return
-  }
+  // if (!state.user) {
+  //   // TODO: prompt the user to sign in with twitter
+  //   console.log("No user. Sign in to save score")
+  //   return
+  // }
 
   if (!prevTopScore || score > prevTopScore) {
     console.log("saving score...")
-    processScore([meta]).then(console.log).catch(console.error)
+    // processScore([meta]).then(console.log).catch(console.error)
+    const formData = new FormData()
+    formData.append("meta", meta)
+    formData.append("score", String(score))
+    fetch("http://127.0.0.1:8090/score", {
+      method: "post",
+      body: formData,
+      headers: {
+        ContentType: "multipart/form-data",
+      },
+    })
   }
 }
 

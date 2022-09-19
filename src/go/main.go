@@ -137,7 +137,7 @@ func saveScore(gs *gameState) {
 	scoreString := fmt.Sprintf("%010d", gs.score) + gameImage
 
 	encScore := xor(scoreString, ScoreSecret)
-	window.Call("saveScore", encScore, gs.score)
+	window.Call("saveScore", encScore, gs.score, gameImage)
 }
 
 func spawnFood(gs *gameState) {

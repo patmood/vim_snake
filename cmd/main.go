@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -59,13 +60,16 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 		// TODO Get previous best score (maybe dont let them update if they cheated?)
 		// record, _ := app.Dao().FindFirstRecordByData(scoreCollection, "displayName", displayName)
 
-		displayName := c.FormValue("displayName")
+		// TODO: get name and picture from auth
+		displayName := "test"
 		meta := c.FormValue("meta")
 		sentScore := c.FormValue("score")
 		timestamp := time.Now()
 
 		cheater := false
-		actualScore := xor(meta, secret)
+		unencrypted := xor(meta, secret)
+		gameImage := unencrypted[10:]
+		actualScore := strings.TrimLeft(unencrypted[:10], "0")
 		if sentScore != actualScore {
 			cheater = true
 			fmt.Print("Scores dont match!!!")
@@ -80,7 +84,8 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 		newRecord.SetDataValue("meta", meta)
 		newRecord.SetDataValue("timestamp", timestamp)
 		newRecord.SetDataValue("cheater", cheater)
-		newRecord.SetDataValue("actualScore", actualScore)
+		newRecord.SetDataValue("score", actualScore)
+		newRecord.SetDataValue("gameImage", gameImage)
 		err := app.Dao().SaveRecord(newRecord)
 		if err != nil {
 			return rest.NewBadRequestError("", err)

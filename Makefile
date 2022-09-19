@@ -7,5 +7,5 @@ export
 # https://github.com/tinygo-org/tinygo/issues/1045
 build:
 	@echo "[go] building..."
-	@go build -o ./dist/main.wasm -ldflags "-X main.ScoreSecret=$(SCORE_SECRET)"  ./src/go/main.go
+	@GOOS=js GOARCH=wasm go build -o ./dist/main.wasm -ldflags "-X main.ScoreSecret=$(SCORE_SECRET)"  ./src/go/main.go
 	@echo "[go] done"

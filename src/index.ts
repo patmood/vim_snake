@@ -3,6 +3,7 @@ import "./leaderboard"
 import { Score, State } from "./types"
 import { db, firebase, functions } from "./firebase"
 
+import PocketBase from "pocketbase"
 import { wasmLoader } from "./wasm-loader"
 
 // Load the game
@@ -10,6 +11,9 @@ wasmLoader("main.wasm")
 
 // State
 let state: State = {}
+
+// Pocketbase client
+const client = new PocketBase(process.env.POCKETBASE_URL)
 
 // Elements
 const signinEl = document.getElementById("signin")
@@ -72,18 +76,21 @@ firebase.auth().onAuthStateChanged((user) => {
   }
 })
 
-// Twitter login
-const provider = new firebase.auth.TwitterAuthProvider()
-const twitterBtn = document.getElementById("twitter")
-twitterBtn.addEventListener("click", () => {
-  firebase
-    .auth()
-    .signInWithPopup(provider)
-    .then((result) => {
-      if (result.additionalUserInfo.isNewUser) {
-        return firebase.auth().currentUser.updateProfile({
-          displayName: result.additionalUserInfo.username,
-        })
-      }
-    })
-})
+// Sign in
+;(async () => {
+  const signinContainer = document.getElementById("signin")
+  // https://pocketbase.io/docs/manage-users/#auth-via-oauth2
+  const authMethods = await client.users.listAuthMethods()
+  authMethods.authProviders.forEach((provider) => {
+    const authLink = `${provider.authUrl}${
+      process.env.OAUTH_REDIRECT_URL || location.origin
+    }/redirect.html`
+    const link = document.createElement("a")
+    link.href = authLink
+    link.innerText = provider.name
+    link.onclick = () => {
+      localStorage.setItem("provider", JSON.stringify(provider))
+    }
+    signinContainer?.append(link)
+  })
+})()

@@ -6,8 +6,8 @@
   "author": "patmood <patrick.n.moody@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "parcel ./src/index.html & watch make ./src/go",
-    "build": "parcel build ./src/index.html"
+    "start": "parcel ./src/*.html & watch make ./src/go",
+    "build": "parcel build ./src/*.html"
   },
   "browserslist": [
     "last 1 Chrome versions"
@@ -20,6 +20,7 @@
   "dependencies": {
     "date-fns": "^2.12.0",
     "firebase": "^7.13.2",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "pocketbase": "^0.7.1"
   }
 }

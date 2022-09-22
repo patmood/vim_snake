@@ -14,6 +14,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase"
+	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/models"
 	"github.com/pocketbase/pocketbase/tools/rest"
@@ -38,6 +39,9 @@ func main() {
 			Method:  http.MethodPost,
 			Path:    "/score",
 			Handler: scoreHandler,
+			Middlewares: []echo.MiddlewareFunc{
+				apis.RequireAdminOrUserAuth(),
+			},
 		})
 
 		return nil
@@ -62,6 +66,7 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 	return func(c echo.Context) error {
 		// TODO Get previous best score (maybe dont let them update if they cheated?)
 		// record, _ := app.Dao().FindFirstRecordByData(scoreCollection, "displayName", displayName)
+		user := c.Get(apis.ContextUserKey).(*models.User)
 
 		// TODO: get name and picture from auth
 		displayName := "test"
@@ -81,7 +86,7 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 			cheater = true
 			fmt.Print("Scores dont match!!!")
 		}
-		fmt.Printf("actualScore %s, meta %s, sentScore %s, displayName %s", actualScore, meta, sentScore, displayName)
+		fmt.Printf("actualScore %s, sentScore %s, displayName %s", actualScore, sentScore, displayName)
 		if len(displayName) == 0 || len(meta) == 0 || len(sentScore) == 0 {
 			return rest.NewBadRequestError("missing fields", nil)
 		}
@@ -93,6 +98,7 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 		newRecord.SetDataValue("cheater", cheater)
 		newRecord.SetDataValue("score", actualScore)
 		newRecord.SetDataValue("gameImage", gameImage)
+		newRecord.SetDataValue("user", user.Id)
 		err := app.Dao().SaveRecord(newRecord)
 		if err != nil {
 			return rest.NewBadRequestError("", err)

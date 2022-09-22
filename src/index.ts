@@ -32,11 +32,10 @@ window.saveScore = function saveScore(meta: string, score: number) {
     topScoreEl.innerText = String(score)
   }
 
-  // if (!state.user) {
-  //   // TODO: prompt the user to sign in with twitter
-  //   console.log("No user. Sign in to save score")
-  //   return
-  // }
+  if (!client.authStore.token) {
+    prompt("Please sign in to save score!")
+    return
+  }
 
   if (!prevTopScore || score > prevTopScore) {
     console.log("saving score...")
@@ -48,38 +47,47 @@ window.saveScore = function saveScore(meta: string, score: number) {
       body: formData,
       headers: {
         ContentType: "multipart/form-data",
+        Authorization: `User ${client.authStore.token}`,
       },
     })
   }
 }
 
 // Current User
-firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
-    // User is signed in.
-    signinEl.classList.add("hidden")
-    state = { ...state, user }
-
-    // Update User Top Score
-    db.collection("scores")
-      .doc(user.uid)
-      .onSnapshot((doc) => {
-        const score = doc.data() as Score
-        if (score) {
-          state = { ...state, score }
-          topScoreEl.innerText = String(score.score)
-        }
-      })
-  } else {
-    // show signin button
-    signinEl.classList.remove("hidden")
-  }
+console.log("initial auth", client.authStore.model)
+const removeListener = client.authStore.onChange((token, model) => {
+  console.log("New store data:", token, model)
 })
+// firebase.auth().onAuthStateChanged((user) => {
+//   if (user) {
+//     // User is signed in.
+//     signinEl.classList.add("hidden")
+//     state = { ...state, user }
 
-// Sign in
-;(async () => {
-  const signinContainer = document.getElementById("signin")
-  // https://pocketbase.io/docs/manage-users/#auth-via-oauth2
+//     // Update User Top Score
+//     db.collection("scores")
+//       .doc(user.uid)
+//       .onSnapshot((doc) => {
+//         const score = doc.data() as Score
+//         if (score) {
+//           state = { ...state, score }
+//           topScoreEl.innerText = String(score.score)
+//         }
+//       })
+//   } else {
+//     // show signin button
+//     signinEl.classList.remove("hidden")
+//   }
+// })
+
+async function init() {
+  // Top score
+  const userTopScore = await client.records.getList("scores", 1, 50, {
+    // filter: 'created >= "2022-01-01 00:00:00"',
+  })
+  console.log({ userTopScore })
+
+  // Sign in
   const authMethods = await client.users.listAuthMethods()
   authMethods.authProviders.forEach((provider) => {
     const authLink = `${provider.authUrl}${
@@ -91,6 +99,9 @@ firebase.auth().onAuthStateChanged((user) => {
     link.onclick = () => {
       localStorage.setItem("provider", JSON.stringify(provider))
     }
-    signinContainer?.append(link)
+    signinEl?.append(link)
   })
-})()
+}
+
+// Run
+init()

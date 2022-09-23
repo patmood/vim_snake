@@ -18,19 +18,34 @@ if (provider.state !== params.get("state")) {
 }
 
 // authenticate
-client.users
-  .authViaOAuth2(
-    provider.name,
-    params.get("code"),
-    provider.codeVerifier,
-    redirectUrl
-  )
-  .then((authData) => {
+async function authenticate() {
+  try {
+    const authData = await client.users.authViaOAuth2(
+      provider.name,
+      params.get("code"),
+      provider.codeVerifier,
+      redirectUrl
+    )
+
     console.log(JSON.stringify(authData, null, 2))
+    const { profile } = client.authStore.model
+    if (profile) {
+      const data = {
+        name: authData.meta.username,
+        avatarUrl: authData.meta.avatarUrl,
+      }
+      const updateResult = await client.records.update(
+        "profiles",
+        profile.id,
+        data
+      )
+      console.log({ updateResult, data })
+    }
     console.log("Successfully authenticated!")
-    location.href = "/index.html"
-  })
-  .catch((err) => {
+    // location.href = "/index.html"
+  } catch (error) {
     document.getElementById("content").innerText =
-      "Failed to exchange code.\n" + err
-  })
+      "Failed to exchange code.\n" + error
+  }
+}
+authenticate()

@@ -68,8 +68,7 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 		// record, _ := app.Dao().FindFirstRecordByData(scoreCollection, "displayName", displayName)
 		user := c.Get(apis.ContextUserKey).(*models.User)
 
-		// TODO: get name and picture from auth
-		displayName := "test"
+		displayName := user.Profile.GetStringDataValue("name")
 		meta := c.FormValue("meta")
 		sentScore := c.FormValue("score")
 		timestamp := time.Now()
@@ -92,7 +91,8 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 		}
 
 		newRecord := models.NewRecord(scoreCollection)
-		newRecord.SetDataValue("displayName", displayName)
+		newRecord.SetDataValue("displayName", user.Profile.GetStringDataValue("name"))
+		newRecord.SetDataValue("picture", user.Profile.GetStringDataValue("avatarUrl"))
 		newRecord.SetDataValue("meta", meta)
 		newRecord.SetDataValue("timestamp", timestamp)
 		newRecord.SetDataValue("cheater", cheater)

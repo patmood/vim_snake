@@ -1,6 +1,13 @@
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import template from "lodash/template"
 
+function UTCtoDate(utcString) {
+  const [year, month, day, hour, minute, second] = utcString
+    .split(/[-:\s\.]/)
+    .slice(0, 6)
+  return new Date(Date.UTC(year, month - 1, day, hour, minute, second))
+}
+
 export const renderLeaderboard = template(
   `
 <table class="leaders">
@@ -18,16 +25,16 @@ export const renderLeaderboard = template(
         <td><%= score.score %></td>
         <td>
           <a class="leaders-namewrapper" href="https://twitter.com/<%= score.displayName %>" target="_blank">
-            <img class="leaders-avatar" src="<%= score.picture %>" />
+            <img class="leaders-avatar" src="<%= score.picture || score.avatarUrl %>" />
             <div>
               @<%= score.displayName %>
             </div>
           </a>
         </td>
         <td>
-          <p title="<%= new Date(score.timestamp) %>">
+          <p title="<%= UTCtoDate(score.timestamp) %>">
             <%= formatDistanceToNow(
-              new Date(score.timestamp),
+              UTCtoDate(score.timestamp),
               { addSuffix: true }) %>
           </p>
         </td>
@@ -41,5 +48,5 @@ export const renderLeaderboard = template(
   </tbody>
 </table>
 `,
-  { imports: { formatDistanceToNow } }
+  { imports: { formatDistanceToNow, UTCtoDate } }
 )

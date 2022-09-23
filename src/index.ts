@@ -50,6 +50,11 @@ window.saveScore = function saveScore(meta: string, score: number) {
   }
 }
 
+window.logOut = function logOut() {
+  client.authStore.clear()
+  topScoreEl.innerText = 0
+}
+
 function handleUserChange() {
   if (client.authStore.token) {
     signinEl?.classList.add("hidden")

@@ -26,6 +26,7 @@ client.users
     redirectUrl
   )
   .then((authData) => {
+    console.log(JSON.stringify(authData, null, 2))
     console.log("Successfully authenticated!")
     location.href = "/index.html"
   })

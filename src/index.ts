@@ -4,6 +4,7 @@ import { Score, State } from "./types"
 import { db, firebase, functions } from "./firebase"
 
 import PocketBase from "pocketbase"
+import { renderLeaderboard } from "./leaderboard"
 import { wasmLoader } from "./wasm-loader"
 
 // Load the game
@@ -19,6 +20,7 @@ const client = new PocketBase(process.env.POCKETBASE_URL)
 const signinEl = document.getElementById("signin")
 const scoreEl = document.getElementById("score")
 const topScoreEl = document.getElementById("topScore")
+const leadersEl = document.getElementById("leaders")
 
 // Expose functions to call from Go
 window.setScore = function setScore(score: number) {
@@ -81,11 +83,17 @@ const removeListener = client.authStore.onChange((token, model) => {
 // })
 
 async function init() {
-  // Top score
-  const userTopScore = await client.records.getList("scores", 1, 50, {
-    // filter: 'created >= "2022-01-01 00:00:00"',
+  const { items: scores } = await client.records.getList("scores", 1, 10, {
+    sort: `-score`,
   })
-  console.log({ userTopScore })
+  console.log({ scores })
+  leadersEl.innerHTML = renderLeaderboard({ scores })
+
+  // Top score
+  const { items } = await client.records.getList("scores", 1, 1, {
+    filter: `user = "${client.authStore.model?.id}"`,
+  })
+  if (topScoreEl) topScoreEl.innerText = items[0]?.score || 0
 
   // Sign in
   const authMethods = await client.users.listAuthMethods()

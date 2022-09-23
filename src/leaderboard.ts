@@ -1,10 +1,7 @@
-import { firebase, db, functions } from './firebase'
-import template from 'lodash/template'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import { Score } from './types'
+import formatDistanceToNow from "date-fns/formatDistanceToNow"
+import template from "lodash/template"
 
-const leaderEl = document.getElementById('leaders')
-const renderLeaderboard = template(
+export const renderLeaderboard = template(
   `
 <table class="leaders">
   <thead>
@@ -28,9 +25,9 @@ const renderLeaderboard = template(
           </a>
         </td>
         <td>
-          <p title="<%= new Date(score.timestamp.seconds * 1000) %>">
+          <p title="<%= new Date(score.timestamp) %>">
             <%= formatDistanceToNow(
-              new Date(score.timestamp.seconds * 1000),
+              new Date(score.timestamp),
               { addSuffix: true }) %>
           </p>
         </td>
@@ -46,15 +43,3 @@ const renderLeaderboard = template(
 `,
   { imports: { formatDistanceToNow } }
 )
-
-db.collection('scores')
-  .orderBy('score', 'desc')
-  .where('cheater', '==', false)
-  .limit(10)
-  .onSnapshot((querySnapshot: firebase.firestore.QuerySnapshot) => {
-    const scores: Score[] = []
-    querySnapshot.forEach((doc) => {
-      scores.push(doc.data() as Score)
-    })
-    leaderEl.innerHTML = renderLeaderboard({ scores })
-  })

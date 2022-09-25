@@ -69,3 +69,4 @@ node_modules/
 .env
 .DS_Store
 pb_data
+pb_public

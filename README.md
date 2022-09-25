@@ -30,5 +30,7 @@ Set environment vars:
 
 ## TODO
 
+- Script to import old scores
+- Consolidate go modules
 - Add `ctrl + [` keybinding for insert mode
 - Show "i" to eat food when running over food

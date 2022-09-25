@@ -29,7 +29,7 @@ func main() {
 
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		// Static file server for the website
-		e.Router.Static("", "dist")
+		e.Router.Static("", "pb_public")
 
 		scoreHandler, err := handleScore(app)
 		if err != nil {

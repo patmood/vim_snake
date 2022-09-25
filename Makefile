@@ -8,5 +8,5 @@ export
 build:
 	@echo "[go] building..."
 	@GOOS=js GOARCH=wasm go build -o ./src/main.wasm -ldflags "-X main.ScoreSecret=$(SCORE_SECRET)"  ./src/go/main.go
-	@cp ./src/main.wasm ./dist/main.wasm
+	@cp ./src/main.wasm ./pb_public/main.wasm
 	@echo "[go] done"

@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "parcel ./src/*.html & watch make ./src/go",
-    "build": "parcel build ./src/*.html"
+    "build": "parcel build ./src/*.html --out-dir ./pb_public"
   },
   "browserslist": [
     "last 1 Chrome versions"

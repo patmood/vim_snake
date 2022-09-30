@@ -16,20 +16,24 @@ Create a .env file with environment variables shown in .env_example
 
 `yarn build` single build or `yarn start`for development
 
+NOTE: wasm_exec.js needs to be from the specific go version
+
 ### WASM Code
 
 `make` to build (also watched and built by `yarn start`)
 
-### Firebase functions
+### Docker
 
-Set environment vars:
+Build `docker build . -t vimsnake:latest`
 
-`firebase functions:config:set score.secret="same secret as in .env"`
+Run `docker run -p 8090:80 --rm -it vimsnake`
 
-`cd functions` then `yarn deploy` to deploy
+Inspect `docker run --rm -it -p 8090:80 --entrypoint sh vimsnake:latest`
 
 ## TODO
 
+- Get the dockerfile working
+- Build wasm file in same image as the rest of the app https://tinygo.org/getting-started/install/linux/#ubuntudebian
 - Script to import old scores
 - Consolidate go modules
 - Add `ctrl + [` keybinding for insert mode

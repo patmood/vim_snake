@@ -58,12 +58,12 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 	if len(secret) == 0 {
 		log.Fatal("Missing SCORE_SECRET environment var")
 	}
-	scoreCollection, err := app.Dao().FindCollectionByNameOrId("scores")
-	if err != nil {
-		return nil, err
-	}
 
 	return func(c echo.Context) error {
+		scoreCollection, err := app.Dao().FindCollectionByNameOrId("scores")
+		if err != nil {
+			log.Fatal("Missing scores collection")
+		}
 		// TODO Get previous best score (maybe dont let them update if they cheated?)
 		// record, _ := app.Dao().FindFirstRecordByData(scoreCollection, "displayName", displayName)
 		user := c.Get(apis.ContextUserKey).(*models.User)
@@ -99,8 +99,8 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 		newRecord.SetDataValue("score", actualScore)
 		newRecord.SetDataValue("gameImage", gameImage)
 		newRecord.SetDataValue("user", user.Id)
-		err := app.Dao().SaveRecord(newRecord)
-		if err != nil {
+		err2 := app.Dao().SaveRecord(newRecord)
+		if err2 != nil {
 			return rest.NewBadRequestError("", err)
 		}
 		return c.JSON(200, newRecord)

@@ -28,6 +28,6 @@ COPY --from=BUILDER /app/pocketbase .
 COPY --from=BUILDER /app/.env .
 COPY --from=BUILDER /app/pb_public ./pb_public
 EXPOSE 8090
-ENTRYPOINT [ "/app/pocketbase" ]
+ENTRYPOINT [ "/app/pocketbase", "serve", "--http=0.0.0.0:8090"]
 
 # Run it with arguments "serve --http=0.0.0.0:8090"

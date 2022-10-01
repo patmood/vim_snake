@@ -22,7 +22,7 @@ RUN go build -o pocketbase ./cmd/main.go
 
 # Temp steps
 EXPOSE 8090
-CMD ./pocketbase serve
+CMD ./pocketbase serve --http=0.0.0.0:8090
 
 ## Run the app
 # FROM alpine:3.16  

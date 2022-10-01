@@ -26,13 +26,12 @@ NOTE: wasm_exec.js needs to be from the specific go version
 
 Build `docker build . -t vimsnake:latest`
 
-Run `docker run -p 8090:80 --rm -it vimsnake`
+Run `docker run -p 3000:8090 --rm -it vimsnake`
 
-Inspect `docker run --rm -it -p 8090:80 --entrypoint sh vimsnake:latest`
+Inspect `docker run --rm -it -p 3000:8090 --entrypoint sh vimsnake:latest`
 
 ## TODO
 
-- Get the dockerfile working
 - Build wasm file in same image as the rest of the app https://tinygo.org/getting-started/install/linux/#ubuntudebian
 - Script to import old scores
 - Consolidate go modules

@@ -18,14 +18,15 @@ RUN yarn
 RUN yarn build
 
 # Build server
-RUN go build -o pocketbase ./cmd/main.go
+RUN CGO_ENABLED=0 go build -o pocketbase ./cmd/main.go
 
 ## Build the production image
-FROM alpine:3.16.2
+FROM scratch
 WORKDIR /app/
 COPY --from=BUILDER /app/pocketbase .
+COPY --from=BUILDER /app/.env .
 COPY --from=BUILDER /app/pb_public ./pb_public
 EXPOSE 8090
-# ENTRYPOINT [ "/app/pocketbase" ]
-CMD ./pocketbase serve --http=0.0.0.0:8090
+ENTRYPOINT [ "/app/pocketbase" ]
 
+# Run it with arguments "serve --http=0.0.0.0:8090"

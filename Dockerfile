@@ -1,9 +1,10 @@
 ## Build pocketbase app
 FROM golang:1.19.1 AS BUILDER
+ARG ARCH="amd64"
 
 ## Build WASM file
-RUN wget https://github.com/tinygo-org/tinygo/releases/download/v0.25.0/tinygo_0.25.0_arm64.deb
-RUN dpkg -i tinygo_0.25.0_arm64.deb
+RUN wget https://github.com/tinygo-org/tinygo/releases/download/v0.25.0/tinygo_0.25.0_${ARCH}.deb
+RUN dpkg -i tinygo_0.25.0_${ARCH}.deb
 RUN apt-get install -y make
 WORKDIR /app/pb_public
 WORKDIR /app/

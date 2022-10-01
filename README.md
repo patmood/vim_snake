@@ -24,7 +24,7 @@ NOTE: wasm_exec.js needs to be from the specific go version
 
 ### Docker
 
-Build `docker build . -t vimsnake:latest`
+Build `docker build . -t vimsnake:latest --build-arg ARCH=arm64`
 
 Run `docker run -p 3000:8090 --rm -it vimsnake`
 

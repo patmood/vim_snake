@@ -32,8 +32,7 @@ Inspect `docker run --rm -it -p 3000:8090 --entrypoint sh vimsnake:latest`
 
 ## TODO
 
-- Build wasm file in same image as the rest of the app https://tinygo.org/getting-started/install/linux/#ubuntudebian
+- fix the prod image
+- write migrations to setup score table
 - Script to import old scores
 - Consolidate go modules
-- Add `ctrl + [` keybinding for insert mode
-- Show "i" to eat food when running over food

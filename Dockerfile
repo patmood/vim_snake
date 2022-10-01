@@ -1,36 +1,31 @@
-## Build the WASM file
-FROM tinygo/tinygo:0.25.0 AS tinygobuilder
+## Build pocketbase app
+FROM golang:1.19.1 AS BUILDER
+
+## Build WASM file
+RUN wget https://github.com/tinygo-org/tinygo/releases/download/v0.25.0/tinygo_0.25.0_arm64.deb
+RUN dpkg -i tinygo_0.25.0_arm64.deb
 RUN apt-get install -y make
 WORKDIR /app/pb_public
 WORKDIR /app/
-COPY .env .env
-COPY ./src/go ./src/go
-COPY ./Makefile ./Makefile
-CMD make build
+COPY ./ ./
+RUN make build
 
-## Build pocketbase app
-FROM golang:1.19.1 AS gobuilder
+## Build front end
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get install -y nodejs
 RUN npm install -g yarn
-WORKDIR /app/
-COPY ./ ./
 RUN yarn
 RUN yarn build
-COPY --from=tinygobuilder /app/pb_public ./pb_public
+
+# Build server
 RUN go build -o pocketbase ./cmd/main.go
 
-# Temp steps
+## Build the production image
+FROM alpine:3.16.2
+WORKDIR /app/
+COPY --from=BUILDER /app/pocketbase .
+COPY --from=BUILDER /app/pb_public ./pb_public
 EXPOSE 8090
+# ENTRYPOINT [ "/app/pocketbase" ]
 CMD ./pocketbase serve --http=0.0.0.0:8090
 
-## Run the app
-# FROM alpine:3.16  
-# RUN apk --no-cache add ca-certificates
-# WORKDIR /app/
-# COPY --from=gobuilder /app/pocketbase ./
-# COPY --from=gobuilder /app/pb_public ./pb_public
-# EXPOSE 8090
-# CMD ./pocketbase serve
-
-# "sh: ./pocketbase: not found" when the last image. Maybe the pocketbase build isnt compatible with alpine? not sure

@@ -10,6 +10,7 @@ import (
 	"os"
 	"strings"
 	"time"
+	_ "vim-snake/migrations"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v5"

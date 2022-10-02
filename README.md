@@ -32,7 +32,7 @@ Inspect `docker run --rm -it -p 3000:8090 --entrypoint sh vimsnake:latest`
 
 ## TODO
 
-- fix the prod image
-- write migrations to setup score table
+- Get prod front end working
+- Get twitter and github working in prod
 - Script to import old scores
 - Consolidate go modules

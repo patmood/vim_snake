@@ -9,7 +9,7 @@ import { wasmLoader } from "./wasm-loader"
 wasmLoader("main.wasm")
 
 // Pocketbase client
-const client = new PocketBase(process.env.POCKETBASE_URL)
+const client = new PocketBase()
 window.client = client
 
 // Elements
@@ -83,9 +83,7 @@ async function init() {
   // Sign in
   const authMethods = await client.users.listAuthMethods()
   authMethods.authProviders.forEach((provider) => {
-    const authLink = `${provider.authUrl}${
-      process.env.OAUTH_REDIRECT_URL || location.origin
-    }/redirect.html`
+    const authLink = `${provider.authUrl}${location.origin}/redirect.html`
     const link = document.createElement("a")
     link.classList.add("button")
     link.href = authLink

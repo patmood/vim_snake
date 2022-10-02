@@ -1,9 +1,7 @@
 import PocketBase from "pocketbase"
 
-const client = new PocketBase(process.env.POCKETBASE_URL)
-const redirectUrl = `${
-  process.env.OAUTH_REDIRECT_URL || location.origin
-}/redirect.html`
+const client = new PocketBase()
+const redirectUrl = `${location.origin}/redirect.html`
 console.log({ redirectUrl })
 
 // parse the query parameters from the redirected url

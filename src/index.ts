@@ -39,7 +39,7 @@ window.saveScore = function saveScore(meta: string, score: number) {
     const formData = new FormData()
     formData.append("meta", meta)
     formData.append("score", String(score))
-    fetch("http://127.0.0.1:8090/score", {
+    fetch("/score", {
       method: "post",
       body: formData,
       headers: {

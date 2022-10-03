@@ -37,10 +37,9 @@ async function authenticate() {
         profile.id,
         data
       )
-      console.log({ updateResult, data })
     }
     console.log("Successfully authenticated!")
-    // location.href = "/index.html"
+    location.href = "/"
   } catch (error) {
     document.getElementById("content").innerText =
       "Failed to exchange code.\n" + error

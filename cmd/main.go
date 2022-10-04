@@ -93,7 +93,8 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 
 		newRecord := models.NewRecord(scoreCollection)
 		newRecord.SetDataValue("displayName", user.Profile.GetStringDataValue("name"))
-		newRecord.SetDataValue("picture", user.Profile.GetStringDataValue("avatarUrl"))
+		newRecord.SetDataValue("avatarUrl", user.Profile.GetStringDataValue("avatarUrl"))
+		newRecord.SetDataValue("authProvider", user.Profile.GetStringDataValue("authProvider"))
 		newRecord.SetDataValue("meta", meta)
 		newRecord.SetDataValue("timestamp", timestamp)
 		newRecord.SetDataValue("cheater", cheater)

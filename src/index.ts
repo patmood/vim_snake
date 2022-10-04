@@ -9,7 +9,7 @@ import { wasmLoader } from "./wasm-loader"
 wasmLoader("main.wasm")
 
 // Pocketbase client
-const client = new PocketBase()
+const client = new PocketBase("http://127.0.0.1:8090")
 window.client = client
 
 // Elements

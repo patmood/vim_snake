@@ -31,6 +31,7 @@ async function authenticate() {
       const data = {
         name: authData.meta.username,
         avatarUrl: authData.meta.avatarUrl,
+        authProvider: provider.name,
       }
       const updateResult = await client.records.update(
         "profiles",

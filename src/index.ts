@@ -9,7 +9,7 @@ import { wasmLoader } from "./wasm-loader"
 wasmLoader("main.wasm")
 
 // Pocketbase client
-const client = new PocketBase("http://127.0.0.1:8090")
+const client = new PocketBase()
 window.client = client
 
 // Elements
@@ -46,7 +46,7 @@ window.saveScore = function saveScore(meta: string, score: number) {
         ContentType: "multipart/form-data",
         Authorization: `User ${client.authStore.token}`,
       },
-    })
+    }).then(() => getScores())
   }
 }
 
@@ -63,11 +63,7 @@ function handleUserChange() {
   }
 }
 
-async function init() {
-  // Setup user state
-  const removeListener = client.authStore.onChange(handleUserChange)
-  handleUserChange()
-
+async function getScores() {
   // Leaderboard
   const { items: scores } = await client.records.getList("scores", 1, 10, {
     sort: `-score`,
@@ -79,8 +75,16 @@ async function init() {
     filter: `user = "${client.authStore.model?.id}"`,
   })
   if (topScoreEl) topScoreEl.innerText = items[0]?.score || 0
+}
 
-  // Sign in
+async function init() {
+  // Setup user state
+  const removeListener = client.authStore.onChange(handleUserChange)
+  handleUserChange()
+
+  getScores()
+
+  // Sign in buttons
   const authMethods = await client.users.listAuthMethods()
   authMethods.authProviders.forEach((provider) => {
     const authLink = `${provider.authUrl}${location.origin}/redirect.html`

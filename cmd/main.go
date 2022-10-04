@@ -65,26 +65,34 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 		if err != nil {
 			log.Fatal("Missing scores collection")
 		}
-		// TODO Get previous best score (maybe dont let them update if they cheated?)
-		// record, _ := app.Dao().FindFirstRecordByData(scoreCollection, "displayName", displayName)
 		user := c.Get(apis.ContextUserKey).(*models.User)
+		// TODO: check previous score
+		// prevScore, _ := app.Dao().FindRecordsByExpr(scoreCollection, dbx.Expression{}, user.Id)
 
 		displayName := user.Profile.GetStringDataValue("name")
 		meta := c.FormValue("meta")
 		sentScore := c.FormValue("score")
 		timestamp := time.Now()
 
+		// if prevScore.GetStringDataValue("score") > sentScore {
+		// 	fmt.Printf("prevScore %s, sentScore %s", prevScore.GetStringDataValue("score"), sentScore)
+		// 	fmt.Printf("didn't beat high score")
+		// 	return c.JSON(200, prevScore)
+		// }
+
 		cheater := false
 		unencrypted, err1 := Decrypt(meta, secret)
 		if err1 != nil {
-			rest.NewBadRequestError("decryption failed", err1)
+			return rest.NewBadRequestError("decryption failed", err1)
 		}
 
 		gameImage := unencrypted[10:]
 		actualScore := strings.TrimLeft(unencrypted[:10], "0")
 		if sentScore != actualScore {
 			cheater = true
-			fmt.Print("Scores dont match!!!")
+			return rest.NewApiError(418, "YOU DIDN'T SAY THE MAGIC WORD!", map[string]string{
+				"key": "https://youtu.be/z0O32YA4Ibs?t=48",
+			})
 		}
 		fmt.Printf("actualScore %s, sentScore %s, displayName %s", actualScore, sentScore, displayName)
 		if len(displayName) == 0 || len(meta) == 0 || len(sentScore) == 0 {

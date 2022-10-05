@@ -16,7 +16,7 @@ func init() {
 			{
 				"id": "systemprofiles0",
 				"created": "2022-09-18 20:46:25.708",
-				"updated": "2022-09-23 04:25:40.975",
+				"updated": "2022-10-04 04:06:21.629",
 				"name": "profiles",
 				"system": true,
 				"schema": [
@@ -77,6 +77,19 @@ func init() {
 							"max": null,
 							"pattern": ""
 						}
+					},
+					{
+						"system": false,
+						"id": "pkbq9lz8",
+						"name": "authProvider",
+						"type": "text",
+						"required": true,
+						"unique": false,
+						"options": {
+							"min": null,
+							"max": null,
+							"pattern": ""
+						}
 					}
 				],
 				"listRule": "userId = @request.user.id",
@@ -88,7 +101,7 @@ func init() {
 			{
 				"id": "t9ag1exaqws3024",
 				"created": "2022-09-18 20:50:29.838",
-				"updated": "2022-09-23 04:38:56.188",
+				"updated": "2022-10-04 04:24:50.462",
 				"name": "scores",
 				"system": false,
 				"schema": [
@@ -130,7 +143,7 @@ func init() {
 					{
 						"system": false,
 						"id": "c0zwgseh",
-						"name": "picture",
+						"name": "avatarUrl",
 						"type": "text",
 						"required": false,
 						"unique": false,
@@ -174,6 +187,19 @@ func init() {
 						"options": {
 							"maxSelect": 1,
 							"cascadeDelete": false
+						}
+					},
+					{
+						"system": false,
+						"id": "z14ynz76",
+						"name": "authProvider",
+						"type": "text",
+						"required": true,
+						"unique": false,
+						"options": {
+							"min": null,
+							"max": null,
+							"pattern": ""
 						}
 					}
 				],

@@ -25,6 +25,7 @@ RUN CGO_ENABLED=0 go build -o pocketbase ./cmd/main.go
 FROM alpine:3.6
 WORKDIR /app/
 RUN apk add --no-cache ca-certificates
+COPY --from=BUILDER /app/migrations ./migrations
 COPY --from=BUILDER /app/pocketbase .
 COPY --from=BUILDER /app/.env .
 COPY --from=BUILDER /app/pb_public ./pb_public

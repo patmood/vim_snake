@@ -4,16 +4,17 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 	_ "vim-snake/migrations"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v5"
+	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
@@ -66,19 +67,21 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 			log.Fatal("Missing scores collection")
 		}
 		user := c.Get(apis.ContextUserKey).(*models.User)
-		// TODO: check previous score
-		// prevScore, _ := app.Dao().FindRecordsByExpr(scoreCollection, dbx.Expression{}, user.Id)
+		prevScoreRecords, _ := app.Dao().FindRecordsByExpr(scoreCollection, dbx.NewExp("[[user]] = {:userid}", dbx.Params{"userid": user.Id}))
+		var prevScoreRecord *models.Record
+		if len(prevScoreRecords) > 0 {
+			prevScoreRecord = prevScoreRecords[0]
+		}
 
 		displayName := user.Profile.GetStringDataValue("name")
 		meta := c.FormValue("meta")
 		sentScore := c.FormValue("score")
 		timestamp := time.Now()
 
-		// if prevScore.GetStringDataValue("score") > sentScore {
-		// 	fmt.Printf("prevScore %s, sentScore %s", prevScore.GetStringDataValue("score"), sentScore)
-		// 	fmt.Printf("didn't beat high score")
-		// 	return c.JSON(200, prevScore)
-		// }
+		sentScoreInt, _ := strconv.Atoi(sentScore)
+		if prevScoreRecord != nil && prevScoreRecord.GetIntDataValue("score") > sentScoreInt {
+			return c.JSON(200, prevScoreRecord)
+		}
 
 		cheater := false
 		unencrypted, err1 := Decrypt(meta, secret)
@@ -90,16 +93,17 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 		actualScore := strings.TrimLeft(unencrypted[:10], "0")
 		if sentScore != actualScore {
 			cheater = true
-			return rest.NewApiError(418, "YOU DIDN'T SAY THE MAGIC WORD!", map[string]string{
-				"key": "https://youtu.be/z0O32YA4Ibs?t=48",
-			})
+			return rest.NewApiError(418, " https://youtu.be/z0O32YA4Ibs?t=48 ", nil)
 		}
-		fmt.Printf("actualScore %s, sentScore %s, displayName %s", actualScore, sentScore, displayName)
+
 		if len(displayName) == 0 || len(meta) == 0 || len(sentScore) == 0 {
 			return rest.NewBadRequestError("missing fields", nil)
 		}
 
 		newRecord := models.NewRecord(scoreCollection)
+		if prevScoreRecord != nil {
+			newRecord.SetId(prevScoreRecord.Id)
+		}
 		newRecord.SetDataValue("displayName", user.Profile.GetStringDataValue("name"))
 		newRecord.SetDataValue("avatarUrl", user.Profile.GetStringDataValue("avatarUrl"))
 		newRecord.SetDataValue("authProvider", user.Profile.GetStringDataValue("authProvider"))

@@ -16,7 +16,7 @@ func init() {
 			{
 				"id": "systemprofiles0",
 				"created": "2022-09-18 20:46:25.708",
-				"updated": "2022-10-04 04:06:21.629",
+				"updated": "2022-10-05 04:50:03.816",
 				"name": "profiles",
 				"system": true,
 				"schema": [
@@ -90,6 +90,15 @@ func init() {
 							"max": null,
 							"pattern": ""
 						}
+					},
+					{
+						"system": false,
+						"id": "o8wz259f",
+						"name": "cheater",
+						"type": "bool",
+						"required": false,
+						"unique": false,
+						"options": {}
 					}
 				],
 				"listRule": "userId = @request.user.id",
@@ -101,19 +110,10 @@ func init() {
 			{
 				"id": "t9ag1exaqws3024",
 				"created": "2022-09-18 20:50:29.838",
-				"updated": "2022-10-04 04:24:50.462",
+				"updated": "2022-10-05 04:58:40.919",
 				"name": "scores",
 				"system": false,
 				"schema": [
-					{
-						"system": false,
-						"id": "hqyhln9t",
-						"name": "cheater",
-						"type": "bool",
-						"required": false,
-						"unique": false,
-						"options": {}
-					},
 					{
 						"system": false,
 						"id": "1fsumyvv",

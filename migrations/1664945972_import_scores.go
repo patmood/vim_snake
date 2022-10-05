@@ -55,7 +55,6 @@ func init() {
 			newRecord.SetDataValue("avatarUrl", score.AvatarUrl)
 			newRecord.SetDataValue("authProvider", "twitter")
 			newRecord.SetDataValue("timestamp", time.Unix(score.Timestamp.Seconds, 0))
-			newRecord.SetDataValue("cheater", score.Cheater)
 			newRecord.SetDataValue("score", score.Score)
 			newRecord.SetDataValue("gameImage", score.GameImage)
 			newRecord.SetDataValue("user", nil)

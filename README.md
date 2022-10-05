@@ -36,5 +36,9 @@ Inspect `docker run --rm -it -p 3000:8090 --entrypoint sh vimsnake:latest`
 
 ## TODO
 
-- Script to import old scores
 - Consolidate go modules
+
+## Pocketbase ideas
+
+- When generating migrations, generate a test file too
+- When making fields required, set default value and enforce at DB level

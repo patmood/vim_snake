@@ -83,7 +83,6 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 			return c.JSON(200, prevScoreRecord)
 		}
 
-		cheater := false
 		unencrypted, err1 := Decrypt(meta, secret)
 		if err1 != nil {
 			return rest.NewBadRequestError("decryption failed", err1)
@@ -92,7 +91,13 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 		gameImage := unencrypted[10:]
 		actualScore := strings.TrimLeft(unencrypted[:10], "0")
 		if sentScore != actualScore {
-			cheater = true
+			// Cheater!
+			profile := user.Profile
+			profile.SetDataValue("cheater", true)
+			err = app.Dao().SaveRecord(profile)
+			if err != nil {
+				log.Println("Failed to save cheater", err)
+			}
 			return rest.NewApiError(418, " https://youtu.be/z0O32YA4Ibs?t=48 ", nil)
 		}
 
@@ -108,12 +113,11 @@ func handleScore(app *pocketbase.PocketBase) (echo.HandlerFunc, error) {
 		newRecord.SetDataValue("avatarUrl", user.Profile.GetStringDataValue("avatarUrl"))
 		newRecord.SetDataValue("authProvider", user.Profile.GetStringDataValue("authProvider"))
 		newRecord.SetDataValue("timestamp", timestamp)
-		newRecord.SetDataValue("cheater", cheater)
 		newRecord.SetDataValue("score", actualScore)
 		newRecord.SetDataValue("gameImage", gameImage)
 		newRecord.SetDataValue("user", user.Id)
-		err2 := app.Dao().SaveRecord(newRecord)
-		if err2 != nil {
+		err = app.Dao().SaveRecord(newRecord)
+		if err != nil {
 			return rest.NewBadRequestError("", err)
 		}
 		return c.JSON(200, newRecord)

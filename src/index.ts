@@ -11,6 +11,11 @@ wasmLoader("main.wasm")
 // Pocketbase client
 const client = new PocketBase()
 window.client = client
+window.loadMore = function () {
+  const button = document.getElementById("loadMore")
+  if (button) button.style.display = "none"
+  getLeaderboard(1000)
+}
 
 // Elements
 const signinEl = document.getElementById("signin")
@@ -46,7 +51,9 @@ window.saveScore = function saveScore(meta: string, score: number) {
         ContentType: "multipart/form-data",
         Authorization: `User ${client.authStore.token}`,
       },
-    }).then(() => getScores())
+    }).then(() => {
+      getLeaderboard(10)
+    })
   }
 }
 
@@ -63,13 +70,7 @@ function handleUserChange() {
   }
 }
 
-async function getScores() {
-  // Leaderboard
-  const { items: scores } = await client.records.getList("scores", 1, 10, {
-    sort: `-score`,
-  })
-  leadersEl.innerHTML = renderLeaderboard({ scores })
-
+async function getTopScore() {
   // User top score
   const { items } = await client.records.getList("scores", 1, 1, {
     filter: `user = "${client.authStore.model?.id}"`,
@@ -77,12 +78,25 @@ async function getScores() {
   if (topScoreEl) topScoreEl.innerText = items[0]?.score || 0
 }
 
+async function getLeaderboard(numResults = 10) {
+  const { items: scores } = await client.records.getList(
+    "scores",
+    1,
+    numResults,
+    {
+      sort: `-score`,
+    }
+  )
+  if (leadersEl) leadersEl.innerHTML = renderLeaderboard({ scores })
+}
+
 async function init() {
   // Setup user state
   const removeListener = client.authStore.onChange(handleUserChange)
   handleUserChange()
 
-  getScores()
+  getTopScore()
+  getLeaderboard()
 
   // Sign in buttons
   const authMethods = await client.users.listAuthMethods()

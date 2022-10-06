@@ -30,7 +30,8 @@ h1 {
 .header,
 .footer {
   text-align: center;
-  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
   font-size: 0.9rem;
 }
 
@@ -135,9 +136,12 @@ a:visited {
   max-width: initial;
 }
 
-/* .signin-link {
-  display: block;
-  padding: 10px;
-  color: #000;
-  background-color: #f1c40f;
-} */
+#loadMore {
+  background: none;
+  color: yellow;
+  text-decoration: underline;
+  border: none;
+  font-family: monospace;
+  font-size: 1rem;
+  cursor: pointer;
+}

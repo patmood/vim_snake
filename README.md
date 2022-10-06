@@ -36,7 +36,7 @@ Inspect `docker run --rm -it -p 3000:8090 --entrypoint sh vimsnake:latest`
 
 ## TODO
 
-- Consolidate go modules
+- Show your top score and thumbnail
 
 ## Pocketbase ideas
 

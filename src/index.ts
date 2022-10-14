@@ -1,7 +1,7 @@
 import "./leaderboard"
 
 import PocketBase from "pocketbase"
-import { State } from "./types"
+import type { ScoresRecord } from "./pocketbase-types"
 import { renderLeaderboard } from "./leaderboard"
 import { wasmLoader } from "./wasm-loader"
 

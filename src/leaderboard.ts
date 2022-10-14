@@ -1,4 +1,4 @@
-import { Score } from "./types"
+import type { ScoresRecord } from "./pocketbase-types"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 
 function UTCtoDate(utcString) {
@@ -8,7 +8,7 @@ function UTCtoDate(utcString) {
   return new Date(Date.UTC(year, month - 1, day, hour, minute, second))
 }
 
-export function renderLeaderboard({ scores }: { scores: Array<Score> }) {
+export function renderLeaderboard({ scores }: { scores: Array<ScoresRecord> }) {
   const rows = scores
     .map((score, i) => {
       return `

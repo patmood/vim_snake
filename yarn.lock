@@ -4430,6 +4430,7 @@ pocketbase@^0.7.1:
   resolved "https://registry.yarnpkg.com/pocketbase/-/pocketbase-0.7.3.tgz#5a741aec692ed6cfbc333803ce97af22ca09b8d3"
   integrity sha512-sMbj6uw0f/u9xALsow9b2xlA/6vCB+R0DVswldTxxSBY+HQNz2EyLW2jQu8sMYwo7W0OF2VPyV2Aa+RlhyPoLQ==
 
+<<<<<<< HEAD
 posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
@@ -4448,6 +4449,22 @@ postcss-colormin@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/postcss-colormin/-/postcss-colormin-4.0.3.tgz#ae060bce93ed794ac71264f08132d550956bd381"
   integrity sha512-WyQFAdDZpExQh32j0U0feWisZ0dmOtPl44qYmJKkq9xFWY3p+4qnRzCHeNrkeRhwPHz9bQ3mo0/yVkaply0MNw==
+=======
+"pocketbase@^0.7.1":
+  "integrity" "sha512-uA/Ltci3OrZ/sYfOjB/SCQX87xnB0Gowci0eUNgK7Sb0gk68Yy79ynTKgcmrw6wdXXVrY/vOoNR/DU8oahCBAA=="
+  "resolved" "https://registry.npmjs.org/pocketbase/-/pocketbase-0.7.1.tgz"
+  "version" "0.7.1"
+
+"posix-character-classes@^0.1.0":
+  "integrity" "sha1-AerA/jta9xoqbAL+q7jB/vfgDqs="
+  "resolved" "https://registry.npmjs.org/posix-character-classes/-/posix-character-classes-0.1.1.tgz"
+  "version" "0.1.1"
+
+"postcss-calc@^7.0.1":
+  "integrity" "sha512-rofZFHUg6ZIrvRwPeFktv06GdbDYLcGqh9EwiMutZg+a0oePCCw1zHOEiji6LCpyRcjTREtPASuUqeAvYlEVvQ=="
+  "resolved" "https://registry.npmjs.org/postcss-calc/-/postcss-calc-7.0.2.tgz"
+  "version" "7.0.2"
+>>>>>>> d01fdbd (unlink pocketbase-typegen)
   dependencies:
     browserslist "^4.0.0"
     color "^3.0.0"

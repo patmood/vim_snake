@@ -20,7 +20,6 @@
   },
   "dependencies": {
     "date-fns": "^2.12.0",
-    "pocketbase": "^0.7.1",
-    "pocketbase-typegen": "https://github.com/patmood/pocketbase-typegen"
+    "pocketbase": "^0.7.1"
   }
 }

@@ -9,12 +9,13 @@ import (
 )
 
 type gameState struct {
-	snake      []point
-	dir        Direction
-	pendingDir Direction
-	insertMode bool
-	food       point
-	score      int
+	snake       []point
+	dir         Direction
+	pendingDir  Direction
+	insertMode  bool
+	food        point
+	score       int
+	keysPressed map[string]bool
 }
 type point struct{ x, y int }
 
@@ -34,6 +35,8 @@ const scoreStep int = 125
 const gameSpeed int = 100
 const primaryColor string = "#00CC00"
 const headColor string = "#00a400"
+const ctrlKey string = "Control"
+const openSquareBraceKey string = "["
 
 // Filled by build flag
 var ScoreSecret string
@@ -54,12 +57,13 @@ func main() {
 	randomInstance = rand.New(s1)
 
 	var gs = gameState{
-		snake:      make([]point, 0),
-		dir:        Right,
-		pendingDir: Right,
-		insertMode: false,
-		food:       point{x: randomInstance.Intn(canvasSize), y: randomInstance.Intn(canvasSize)},
-		score:      0,
+		snake:       make([]point, 0),
+		dir:         Right,
+		pendingDir:  Right,
+		insertMode:  false,
+		food:        point{x: randomInstance.Intn(canvasSize), y: randomInstance.Intn(canvasSize)},
+		score:       0,
+		keysPressed: map[string]bool{ctrlKey: false, openSquareBraceKey: false},
 	}
 
 	setup(&gs)
@@ -217,7 +221,15 @@ func setup(gs *gameState) {
 		updateDirection(gs, key)
 		return nil
 	})
+
+	keyupEventHandler := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		key := args[0].Get("key").String()
+        updateKeyup(gs, key)
+		return nil
+	})
+
 	window.Call("addEventListener", "keydown", keydownEventHandler)
+	window.Call("addEventListener", "keyup", keyupEventHandler)
 
 	container.Call("appendChild", canvas)
 
@@ -225,7 +237,19 @@ func setup(gs *gameState) {
 	beep = window.Get("Audio").New("data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjI1LjEwMQAAAAAAAAAAAAAA/+NAwAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA3YAlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaW8PDw8PDw8PDw8PDw8PDw8PDw8PDw8PDw8PDw8PDw8PDw////////////////////////////////////////////AAAAAExhdmYAAAAAAAAAAAAAAAAAAAAAACQAAAAAAAAAAAN2UrY2LgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/jYMQAEvgiwl9DAAAAO1ALSi19XgYG7wIAAAJOD5R0HygIAmD5+sEHLB94gBAEP8vKAgGP/BwMf+D4Pgh/DAPg+D5//y4f///8QBhMQBgEAfB8HwfAgIAgAHAGCFAj1fYUCZyIbThYFExkefOCo8Y7JxiQ0mGVaHKwwGCtGCUkY9OCugoFQwDKqmHQiUCxRAKOh4MjJFAnTkq6QqFGavRpYUCmMxpZnGXJa0xiJcTGZb1gJjwOJDJgoUJG5QQuDAsypiumkp5TUjrOobR2liwoGBf/X1nChmipnKVtSmMNQDGitG1fT/JhR+gYdCvy36lTrxCVV8Paaz1otLndT2fZuOMp3VpatmVR3LePP/8bSQpmhQZECqWsFeJxoepX9dbfHS13/////aysppUblm//8t7p2Ez7xKD/42DE4E5z9pr/nNkRw6bhdiCAZVVSktxunhxhH//4xF+bn4//6//3jEvylMM2K9XmWSn3ah1L2MqVIjmNlJtpQux1n3ajA0ZnFSu5EpX////uGatn///////1r/pYabq0mKT//TRyTEFNRTMuOTkuNaqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq/+MQxNIAAANIAcAAAKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqg==")
 }
 
+func updateKeyup(gs *gameState, key string) {
+    if gs.keysPressed[key] {
+        gs.keysPressed[key] = false
+    }
+}
+
 func updateDirection(gs *gameState, key string) {
+    if key == ctrlKey || key == openSquareBraceKey {
+        gs.keysPressed[key] = true
+    }
+    if gs.keysPressed[ctrlKey] == true && gs.keysPressed[openSquareBraceKey] == true {
+        gs.insertMode = false
+    }
 	switch key {
 	case "i":
 		gs.insertMode = true

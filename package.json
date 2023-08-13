@@ -14,7 +14,7 @@
     "last 1 Chrome versions"
   ],
   "devDependencies": {
-    "parcel": "^1.12.4",
+    "parcel": "1.12.3",
     "typescript": "^3.8.3",
     "watch": "^1.0.2"
   },
